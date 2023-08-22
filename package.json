@@ -1,10 +1,10 @@
 {
-  "name": "pr-screen-adapter",
+  "name": "pr-tools",
   "version": "1.0.0",
   "description": "一些常用的js方法。",
   "type": "module",
-  "main": "./src/tools/PrScreenAdapter/index.js",
-  "types": "./src/tools/PrScreenAdapter/index.d.ts",
+  "main": "./src/tools/index.js",
+  "types": "./src/tools/index.d.ts",
   "author": "Breathe",
   "license": "ISC"
 }
