@@ -22,7 +22,7 @@ import * as prTools from './tools/index.js'
 ```js
 {
   // uuid
-  let str = uuid(16, 16)
+  let str = uuid(16, 16) // 长度 进制
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
 }
 ```
@@ -43,17 +43,34 @@ import * as prTools from './tools/index.js'
   let str = regTest.mobile('22')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regTest`, str)
 }
+// 全部方法，使用ts自行索引
+// export const regTest = {
+//   email,
+//   mobile,
+//   url,
+//   date,
+//   dateISO,
+//   number,
+//   digits,
+//   idCard,
+//   carNo,
+//   amount,
+//   chinese,
+//   letter,
+//   enOrNum,
+//   landline
+// }
 ```
 
 #### transfer 转换
 
 ```js
-// timeFormat
+// timeFormat 格式化时间
 {
   let str = timeFormat(new Date().getTime(), 'yyyy-mm-dd hh:MM:ss')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
 }
-// timeFrom
+// timeFrom 格式化时间 多久之前
 {
   let str = timeFrom(new Date().getTime() - 5600000)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFrom`, str)
