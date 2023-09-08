@@ -1,10 +1,40 @@
 {
   "name": "pr-tools",
-  "version": "1.0.0",
   "description": "一些常用的js方法。",
+  "version": "1.0.3",
   "type": "module",
-  "main": "./src/tools/index.js",
-  "types": "./src/tools/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:dts": "tsc && vite build && npx -p typescript tsc lib/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "private": false,
   "author": "Breathe",
-  "license": "ISC"
+  "keywords": [
+    "pr-tools"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "仓库地址"
+  },
+  "dependencies": {
+    "pr-tools": "^1.0.3"
+  }
 }
