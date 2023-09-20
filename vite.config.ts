@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: 'PrTools',
+      name: 'pr-tools',
       fileName: 'index'
     },
     rollupOptions: {
