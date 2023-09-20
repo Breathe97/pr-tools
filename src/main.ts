@@ -1,8 +1,8 @@
-import { uuid, md5, regTest, timeFormat, timeFrom } from '../dist/index.js'
-import * as prTools from '../dist/index.js'
+// import { uuid, md5, regTest, timeFormat, timeFrom } from '../dist/index.js'
+// import * as prTools from '../dist/index.js'
 
-// import { uuid, md5, regTest, timeFormat, timeFrom } from "../dist/index.js";
-// import * as prTools from "../dist/index.js";
+import { uuid, md5, regTest, timeFormat, timeFrom } from 'pr-tools'
+import * as prTools from 'pr-tools'
 // uuid
 {
   let str = uuid(16, 16)
