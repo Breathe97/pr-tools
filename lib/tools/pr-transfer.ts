@@ -69,7 +69,7 @@ export const timeFrom = (timestamp = '', format = 'yyyy-mm-dd') => {
 }
 
 // ArrayBuffer转十六进制
-export const ab2hex = (buffer = new ArrayBuffer()) => {
+export const ab2hex = (buffer = new ArrayBuffer(0)) => {
   if (!buffer) return buffer
   const hexArr = Array.prototype.map.call(new Uint8Array(buffer), function (bit) {
     return ('00' + bit.toString(16)).slice(-2)
@@ -111,7 +111,7 @@ export const hex2str = (hexCharCodeStr = '') => {
 
 // 短划线转换驼峰
 export const line2hump = (str = '') => {
-  const _str = str.replace(/\-(\w)/g, (all, letter) => {
+  const _str = str.replace(/\-(\w)/g, (_, letter) => {
     const new_letter = letter.toUpperCase()
     return new_letter
   })

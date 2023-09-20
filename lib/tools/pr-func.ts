@@ -1,7 +1,7 @@
 // 随机生成uuid
-export const uuid = (len = 16 || '16', radix = 16 || '16') => {
+export const uuid = (len = 16, radix = 16) => {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-  let uuid = [],
+  let uuid: string[] = [],
     i
   radix = radix || chars.length
   if (len) {

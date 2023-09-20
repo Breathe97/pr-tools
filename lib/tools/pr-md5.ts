@@ -1,3 +1,4 @@
+// @ts-nocheck
 let rotateLeft = (lValue, iShiftBits) => {
   return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits))
 }

@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["lib"],
   "emitDeclarationOnly": true,
   "declaration": true
 }
