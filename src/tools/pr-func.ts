@@ -1,4 +1,9 @@
-// 随机生成uuid
+/**
+ * 随机生成uuid
+ * @param len 长度
+ * @param radix 进制
+ * @returns string
+ */
 export const uuid = (len = 16, radix = 16) => {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   let uuid: string[] = [],
@@ -23,4 +28,77 @@ export const uuid = (len = 16, radix = 16) => {
     }
   }
   return uuid.join('')
+}
+
+// 把数字分割为千分位计量字符串
+export const num2split = (number = '') => {
+  // 传入的是空字符串
+  if (number === '') return number
+  let n = Number(number)
+  // 如果传入的是非数 直接返回
+  if (isNaN(n)) return number
+  let r = ''
+  let temp
+  let mod
+  do {
+    // 求模的值， 用于获取高三位，这里可能有小数
+    mod = n % 1000
+    // 值是不是大于1，是继续的条件
+    n = n / 1000
+    // 高三位
+    temp = ~~mod
+    r = (n >= 1 ? `${temp}`.padStart(3, '0') : temp) + (!!r ? ',' + r : '')
+  } while (n >= 1)
+  const strNumber = number + ''
+  let index = strNumber.indexOf('.')
+  // 拼接小数部分
+  if (index >= 0) {
+    r += strNumber.substring(index)
+  }
+  return r
+}
+
+// 把数组分割多个二维数组
+export const arrSlice = (arr = [], size = 0) => {
+  // size=5，要分割的长度
+  const arrNum = Math.ceil(arr.length / size) // Math.ceil()向上取整的方法，用来计算拆分后数组的长度
+  let index = 0 // 定义初始索引
+  let resIndex = 0 // 用来保存每次拆分的长度
+  const result = []
+  while (index < arrNum) {
+    result[index] = arr.slice(resIndex, size + resIndex)
+    resIndex += size
+    index++
+  }
+  return result
+}
+
+// 在数组里面向上向下取整数的一个范围 , accuracy 精度 默认10，比如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
+// 一般在echart中使用：
+// min: ({ min = 0, max = 0 }) => {
+//     const [yAxisMin, yAxisMax] = getArrRange([min, max], 10) // 取区间整数 [1,87] => [0,90]
+//     return yAxisMin
+// },
+// max: ({ min = 0, max = 0 }) => {
+//     const [yAxisMin, yAxisMax] = getArrRange([min, max], 10) // 取区间整数 [1,87] => [0,90]
+//     return yAxisMax
+// },
+export const getArrRange = (arr = [], accuracy = 10) => {
+  let min = 0
+  let max = 100
+  // 去除非数
+  arr = arr.filter((item) => !isNaN(item))
+  // 对arr进行排序
+  arr = arr.sort((a, b) => (Number(a) < Number(b) ? -1 : 1))
+  min = arr[0]
+  arr.reverse()
+  max = arr[0]
+  // 根据精度处理min，max
+  min = Math.floor(min / accuracy) * accuracy
+  max = Math.ceil(max / accuracy) * accuracy
+  // 如果min与max相等max需要递增一个差值
+  if (min === max) {
+    max += accuracy
+  }
+  return [min, max]
 }
