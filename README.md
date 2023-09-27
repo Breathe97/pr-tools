@@ -12,9 +12,9 @@ npm i pr-tools
 
 ```js
 // 按需引入
-import { uuid, md5, regTest, timeFormat, timeFrom, line2hump, hump2line } from './tools/index.js'
+import { uuid, md5, regTest, timeFormat, timeFrom, line2hump, hump2line } from 'pr-tools'
 // 或全量引入
-import * as prTools from './tools/index.js'
+import * as prTools from 'pr-tools'
 ```
 
 #### 常用函数
