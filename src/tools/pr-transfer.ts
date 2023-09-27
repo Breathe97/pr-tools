@@ -1,4 +1,9 @@
-// 格式化时间
+/**
+ * 格式化时间
+ * @param {String} dateTime 时间戳
+ * @param {String} format 默认的格式化内容 yyyy-mm-dd hh:MM:ss
+ * @returns {String} 格式化后的字符串
+ */
 export const timeFormat = (dateTime = '', format = 'yyyy-mm-dd') => {
   if (!dateTime) return ''
   // 如果可以转为数字 则优先认为是时间戳
@@ -6,6 +11,7 @@ export const timeFormat = (dateTime = '', format = 'yyyy-mm-dd') => {
   let date = new Date(timestamp || dateTime)
   // 无效的日期格式
   if (`${date}` === 'Invalid Date') return dateTime
+
   // 正常对日期的处理
   let opt = {
     'y+': date.getFullYear().toString(), // 年
@@ -30,13 +36,22 @@ export const timeFormat = (dateTime = '', format = 'yyyy-mm-dd') => {
   return format
 }
 
-// 格式化时间 多久以前
-export const timeFrom = (timestamp = '', format = 'yyyy-mm-dd') => {
-  if (!timestamp) return ''
-  let timestamp_num = Number(timestamp)
-  // 判断用户输入的时间戳是秒还是毫秒,一般前端js获取的时间戳是毫秒(13位),后端传过来的为秒(10位)
-  if (timestamp.toString().length == 10) timestamp_num *= 1000
-  let timer = new Date().getTime() - timestamp_num
+/**
+ * 格式化时间
+ * @param {String} dateTime 时间戳
+ * @param {String} format 默认的格式化内容 yyyy-mm-dd hh:MM:ss
+ * @returns {String} 格式化后的字符串
+ */
+export const timeFrom = (dateTime = '', format = 'yyyy-mm-dd') => {
+  if (!dateTime) return ''
+  // 如果可以转为数字 则优先认为是时间戳
+  let timestamp = Number(dateTime)
+  let date = new Date(timestamp || dateTime)
+  // 无效的日期格式
+  if (`${date}` === 'Invalid Date') return dateTime
+
+  // 如果要优先处理为 多久之前
+  let timer = new Date().getTime() - timestamp
   timer = Math.floor(timer / 1000)
   // 如果小于5分钟,则返回"刚刚",其他以此类推
   let tips = ''
@@ -62,13 +77,17 @@ export const timeFrom = (timestamp = '', format = 'yyyy-mm-dd') => {
           tips = Math.floor(timer / (86400 * 365)) + '年前'
         }
       } else {
-        tips = timeFormat(timestamp, format)
+        tips = timeFormat(`${timer}`, format)
       }
   }
   return tips
 }
 
-// ArrayBuffer转十六进制
+/**
+ * ArrayBuffer转十六进制
+ * @param {ArrayBuffer} buffer arrayBuffer
+ * @returns {String} 十六进制字符串
+ */
 export const ab2hex = (buffer = new ArrayBuffer(0)) => {
   if (!buffer) return buffer
   const hexArr = Array.prototype.map.call(new Uint8Array(buffer), function (bit) {
@@ -78,7 +97,11 @@ export const ab2hex = (buffer = new ArrayBuffer(0)) => {
   return hexArr.join('').toUpperCase()
 }
 
-// 十六进制转ArrayBuffer
+/**
+ * 十六进制转ArrayBuffer
+ * @param {String} str 十六进制字符串
+ * @returns {ArrayBuffer} buffer
+ */
 export const hex2ab = (str = '') => {
   let buffer = new ArrayBuffer(str.length * 0.5)
   let dataView = new DataView(buffer)
@@ -90,7 +113,11 @@ export const hex2ab = (str = '') => {
   return buffer
 }
 
-// 十六进制转ASCII码
+/**
+ * 十六进制转ASCII码
+ * @param {String} hexCharCodeStr 16进制字符串
+ * @returns {String} 转换后的ASCII码
+ */
 export const hex2str = (hexCharCodeStr = '') => {
   let trimedStr = hexCharCodeStr.trim()
   let rawStr = trimedStr.substr(0, 2).toLowerCase() === '0x' ? trimedStr.substr(2) : trimedStr
@@ -109,7 +136,11 @@ export const hex2str = (hexCharCodeStr = '') => {
   return resultStr.join('')
 }
 
-// 短划线转换驼峰
+/**
+ * 短划线转换驼峰
+ * @param {String} str 短横线字符串
+ * @returns {String} 驼峰字符串
+ */
 export const line2hump = (str = '') => {
   const _str = str.replace(/\-(\w)/g, (_, letter) => {
     const new_letter = letter.toUpperCase()
@@ -118,7 +149,11 @@ export const line2hump = (str = '') => {
   return _str
 }
 
-// 驼峰转换短横线
+/**
+ * 驼峰转换短横线
+ * @param {String} str 驼峰字符串
+ * @returns {String} 短横线字符串
+ */
 export const hump2line = (str = '') => {
   let _str = str.replace(/([A-Z])/g, '-$1').toLowerCase()
   // 头部横线
@@ -130,7 +165,11 @@ export const hump2line = (str = '') => {
   return _str
 }
 
-// 去除首尾空格
+/**
+ * 去除首尾空格
+ * @param {String} str 字符串
+ * @returns {String} 结果字符串
+ */
 export const delSpaces = (str = '') => {
   return str.replace(/(^\s*)|(\s*$)/g, '')
 }

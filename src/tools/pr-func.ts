@@ -1,8 +1,8 @@
 /**
  * 随机生成uuid
- * @param len 长度
- * @param radix 进制
- * @returns string
+ * @param {Number} len 长度
+ * @param {Number} radix 进制
+ * @returns {String} 随机uuid
  */
 export const uuid = (len = 16, radix = 16) => {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
@@ -30,7 +30,11 @@ export const uuid = (len = 16, radix = 16) => {
   return uuid.join('')
 }
 
-// 把数字分割为千分位计量字符串
+/**
+ * 把数字分割为千分位计量的字符串
+ * @param {Number} number 数值
+ * @returns {String} 千分位计量的字符串
+ */
 export const num2split = (number = '') => {
   // 传入的是空字符串
   if (number === '') return number
@@ -58,7 +62,12 @@ export const num2split = (number = '') => {
   return r
 }
 
-// 把数组分割多个二维数组
+/**
+ * 把一纬数组按指定长度分割
+ * @param {Array} arr 一纬数组
+ * @param {Number} size 分割长度
+ * @returns {Array} 分割后的二维数组
+ */
 export const arrSlice = (arr = [], size = 0) => {
   // size=5，要分割的长度
   const arrNum = Math.ceil(arr.length / size) // Math.ceil()向上取整的方法，用来计算拆分后数组的长度
@@ -73,16 +82,14 @@ export const arrSlice = (arr = [], size = 0) => {
   return result
 }
 
-// 在数组里面向上向下取整数的一个范围 , accuracy 精度 默认10，比如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
-// 一般在echart中使用：
-// min: ({ min = 0, max = 0 }) => {
-//     const [yAxisMin, yAxisMax] = getArrRange([min, max], 10) // 取区间整数 [1,87] => [0,90]
-//     return yAxisMin
-// },
-// max: ({ min = 0, max = 0 }) => {
-//     const [yAxisMin, yAxisMax] = getArrRange([min, max], 10) // 取区间整数 [1,87] => [0,90]
-//     return yAxisMax
-// },
+/**
+ * 在数组里面向上向下取整数的一个范围
+ * @param {Array} arr 多个数值的数组
+ * @param {Number} accuracy 间隔精度
+ * @returns {Array} [min,max]
+ * @notes 例如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
+ * @notes 常在echart中使用  const [yAxisMin, yAxisMax] = getArrRange([1,87], 10) // 取区间整数 [1,87] => [0,90]
+ */
 export const getArrRange = (arr = [], accuracy = 10) => {
   let min = 0
   let max = 100

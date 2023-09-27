@@ -1,13 +1,14 @@
-// import { uuid, md5, regTest, timeFormat, timeFrom } from '../dist/index.js'
+// import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
-import * as prTools from '../../src/index.js'
+// import * as prTools from '../../src/index.js'
 
 import { uuid, md5, regTest, timeFormat, timeFrom } from 'pr-tools'
-// import * as prTools from 'pr-tools'
+import * as prTools from 'pr-tools'
 // uuid
 {
   let str = uuid(16, 16)
   prTools.uuid()
+  prTools.regTest.email()
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
 }
 // md5
