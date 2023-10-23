@@ -1,5 +1,8 @@
+// 实用代码
 export * from './tools/pr-func'
 export * from './tools/pr-md5'
 export * from './tools/pr-regtest'
 export * from './tools/pr-transfer'
-export * from './tools/pr-slimming'
+
+// 娱乐代码
+export * from './funs/pr-slimming'
