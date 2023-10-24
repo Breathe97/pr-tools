@@ -1,7 +1,7 @@
 import { Expand } from '../types'
 
 export type T_Food = {
-  name: '牛奶' | '鸡蛋' | '全麦面包' | '茄皇方便面'
+  name: '牛奶' | '鸡蛋' | '全麦面包' | '茄皇方便面' | '迷你酸牛奶'
   intake?: number // 摄入量(默认)
 }
 
@@ -17,6 +17,7 @@ interface T_foods extends T_Food {
 }
 
 const foods: Expand<T_foods[]> = [
+  { name: '迷你酸牛奶', intake: 100, ratio: { r_size: 100, r_kj: 353, r_unit: 'ml', r_unit_str: '毫升' } },
   { name: '牛奶', intake: 250, ratio: { r_size: 100, r_kj: 269, r_unit: 'ml', r_unit_str: '毫升' } },
   { name: '鸡蛋', intake: 50, ratio: { r_size: 50, r_kj: 77, r_unit: 'g', r_unit_str: '克' } },
   { name: '全麦面包', intake: 123, ratio: { r_size: 100, r_kj: 1070, r_unit: 'g', r_unit_str: '克' } },
@@ -45,14 +46,14 @@ class Foods {
       if (food_info) {
         let { ratio, intake: def_intake } = food_info
         let { r_size, r_kj, r_unit, r_unit_str } = ratio
-        const num = this.#get_QH(intake || def_intake, ratio)
-        info.kj.num += num
-        info.list.push({ ...food, kj: num, ratio: `${r_kj}kj/${r_size}${r_unit}(${r_unit_str})` })
+        const kj = this.#get_QH(intake || def_intake, ratio)
+        const kcal = Math.ceil(kj * 0.239) //   1 千焦（kJ） = 0.239 千卡（kcal）
+        info.kj.num += kj
+        info.kcal.num += kcal
+        info.list.push({ ...food, kj, kcal, ratio: `${r_kj}kj/${r_size}${r_unit}(${r_unit_str})` })
       }
     }
-    // 1 千焦（kJ） = 0.239 千卡（kcal）
-    // 1 千卡（kcal）= 4.184 千焦（kJ）
-    info.kcal.num = Math.ceil(info.kj.num * 0.239)
+
     return info
   }
 

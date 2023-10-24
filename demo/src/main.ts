@@ -59,7 +59,8 @@ import { uuid, md5, regTest, timeFormat, timeFrom } from '../../src/index.js'
 }
 {
   // 午饭
-  const foods = new prTools.slimming.Foods([{ name: '茄皇方便面' }])
+  // const foods = new prTools.slimming.Foods([{ name: '茄皇方便面' }])
+  const foods = new prTools.slimming.Foods([{ name: '迷你酸牛奶' }])
   const res = foods.get_all_info()
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }
