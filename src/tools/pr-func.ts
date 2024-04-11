@@ -89,7 +89,11 @@ export const arrSlice = (arr = [], size = 0) => {
  * @returns {Array} [min,max]
  * @notes 例如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
  * @notes 常在echart中使用  const [yAxisMin, yAxisMax] = getArrRange([1,87], 10) // 取区间整数 [1,87] => [0,90]
+ * @example
+ * getArrRange([-13, 37, 67]) // [-20,70]
+ * getArrRange([0, 0], 10) // [0,10]
  */
+
 export const getArrRange = (arr = [], accuracy = 10) => {
   let min = 0
   let max = 100
