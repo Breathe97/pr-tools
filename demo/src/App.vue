@@ -2,7 +2,7 @@
 import HelloWorld from './components/HelloWorld.vue'
 
 import * as prTools from '../../src/index.js'
-import { uuid, md5, regTest, timeFormat, timeFrom } from '../../src/index.js'
+import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom } from '../../src/index.js'
 
 // import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
@@ -16,6 +16,16 @@ import { uuid, md5, regTest, timeFormat, timeFrom } from '../../src/index.js'
   prTools.uuid()
   prTools.regTest.email()
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
+}
+{
+  // random
+  let str = random(100000, 999999) // 6位数字
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
+}
+{
+  // randomName
+  let str = randomName(1, 4) // 1-4位昵称
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
 }
 // md5
 {

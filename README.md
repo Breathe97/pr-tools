@@ -12,7 +12,7 @@ npm i pr-tools
 
 ```js
 // 按需引入
-import { uuid, md5, regTest, timeFormat, timeFrom, line2hump, hump2line } from 'pr-tools'
+import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom, line2hump, hump2line } from 'pr-tools'
 // 或全量引入
 import * as prTools from 'pr-tools'
 ```
@@ -24,6 +24,16 @@ import * as prTools from 'pr-tools'
   // uuid
   let str = uuid(16, 16) // 长度 进制
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
+}
+{
+  // random
+  let str = random(100000, 999999) // 6位数字
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
+}
+{
+  // randomName
+  let str = randomName(1, 4) // 1-4位昵称
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
 }
 ```
 

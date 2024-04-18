@@ -31,6 +31,35 @@ export const uuid = (len = 16, radix = 16) => {
 }
 
 /**
+ * 随机生成区间数字
+ * @param {Number} min 最小数字（大于等于0）
+ * @param {Number} max 最大数字（大于等于1）
+ * @returns {String} 随机区间数字
+ */
+export const random = (min = 0, max = 1) => {
+  min = Math.max(0, min)
+  max = Math.max(1, max)
+  let num = Math.random() * (max - min + 1) + min
+  return parseInt(`${num}`, 10)
+}
+
+/**
+ * 随机生成昵称
+ * @param {Number} min 最小名称长度(最小1)
+ * @param {Number} max 最大名称长度(大于等于1)
+ * @returns {String} 随机昵称
+ */
+const mameStr = '徒靡绪风颢阳曜灵越扶应图町歧蜀魄漠泊穆皇星霜云今在兮译文欲行予墨青来上卿思贤望古子吟知有易寒非梦居然念唐致远听贤约书何夕北歌清川明庭之恒景行景湛清如问渠凌洲鸣珂彬蔚溯光广思南风到源至诚天诚归远知许沅芷澹雅池雨相宜漪涵遥清易安灵均梦西若云何君远山鹤扬亦河柳新雨晴盛晨惊鸿亦安阑梦如初一心亦行与谐凤兮夕照梧秋思悠得安清秋悠然钟秀冉竹如是喻新弦思月人青时望舒心素桑瑜暄和婉晚芊眠素晚穆沐霜秋'
+export const randomName = (min = 1, max = 1) => {
+  min = Math.max(1, min)
+  max = Math.max(1, max)
+  let startIndex = random(1, mameStr.length - (max - min))
+  let endIndex = startIndex + random(min, max)
+  let str = mameStr.slice(startIndex, endIndex)
+  return str
+}
+
+/**
  * 把数字分割为千分位计量的字符串
  * @param {Number} number 数值
  * @returns {String} 千分位计量的字符串
