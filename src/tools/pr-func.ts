@@ -4,7 +4,7 @@
  * @param {Number} radix 进制
  * @returns {String} 随机uuid
  */
-export const uuid = (len = 16, radix = 16) => {
+export const uuid = (len: number = 32, radix: 2 | 10 | 16 = 16) => {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   let uuid: string[] = [],
     i
