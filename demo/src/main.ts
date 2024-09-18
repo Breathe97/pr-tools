@@ -9,19 +9,18 @@ import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom } from '..
 
 // uuid
 {
-  let str = uuid(16, 16)
+  let str = uuid(32, 16)
   prTools.uuid()
-  prTools.regTest.email()
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
 }
 {
   // random
-  let str = random(100000, 999999) // 6位数字
+  let str = random(-1, 999999) // 6位数字
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
 }
 {
   // randomName
-  let str = randomName(1, 4) // 1-4位昵称
+  let str = randomName(2, 4) // 2-4位昵称
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
 }
 // md5
@@ -55,22 +54,4 @@ import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom } from '..
 {
   let str = prTools.hump2line('AddaDdd')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:hump2line`, str)
-}
-
-{
-  // 早饭
-  const foods = new prTools.slimming.Foods([
-    { name: '牛奶', intake: 250 },
-    { name: '鸡蛋', intake: 50 },
-    { name: '全麦面包', intake: 123 }
-  ])
-  const res = foods.get_all_info()
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
-{
-  // 午饭
-  // const foods = new prTools.slimming.Foods([{ name: '茄皇方便面' }])
-  const foods = new prTools.slimming.Foods([{ name: '迷你酸牛奶' }])
-  const res = foods.get_all_info()
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }
