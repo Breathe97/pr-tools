@@ -173,3 +173,12 @@ export const hump2line = (str = '') => {
 export const delSpaces = (str = '') => {
   return str.replace(/(^\s*)|(\s*$)/g, '')
 }
+
+/**
+ * 获取校准后的当前时间时间戳
+ * @param {Number} offset 校准小时
+ * @returns {Number} timestamp 13位时间戳
+ */
+export const getTime = (offset = 0) => {
+  return new Date().getTime() + 1000 * 60 * 60 * offset // + 8小时
+}
