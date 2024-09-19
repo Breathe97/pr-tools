@@ -79,10 +79,10 @@ export class PrEasyD1<T> {
     try {
       // UPDATE Users SET mobile = ? username = ? WHERE id = ? AND username = ?
       let query = ` UPDATE ${table}`
-      const values = [...Object.values(data), ...Object.values(whereData)]
+      const values = [...Object.values(datas), ...Object.values(whereData)]
 
       {
-        const keys = Object.keys(data)
+        const keys = Object.keys(datas)
         const splitStr = ' = ?' // 分隔符
         let strArr = Array.from(keys, (key) => `${key}${splitStr}`)
         let str = strArr.join('') // mobile = ? username = ?

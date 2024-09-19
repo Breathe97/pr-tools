@@ -1,5 +1,5 @@
 import * as prTools from '../../src/index.js'
-import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom } from '../../src/index.js'
+import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom } from '../../src/index.js'
 
 // import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
@@ -29,10 +29,10 @@ import { uuid, random, randomName, md5, regTest, timeFormat, timeFrom } from '..
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:md5`, str)
 }
 
-// regTest
+// regExps
 {
-  let str = regTest.mobile('22')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regTest`, str)
+  let str = regExps.mobile.test('222')
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regExps`, str)
 }
 
 // timeFormat
