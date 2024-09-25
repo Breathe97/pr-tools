@@ -142,3 +142,24 @@ export const getArrRange = (arr = [], accuracy = 10) => {
   }
   return [min, max]
 }
+
+/**
+ * 筛选对象中指定的key
+ * @param obj 需要筛选的对象
+ * @param keys 需要哪些字段
+ * @param ignoreUndefined 是否忽略值为undefined的字段 默认为true
+ * @returns {} 筛选后的对象
+ */
+export const filterKeys = <T extends { [key: string]: unknown }>(obj: T, keys: (keyof T)[] = [], ignoreUndefined = true): { [key: string]: unknown } => {
+  let data: any = {}
+  if (keys.length === 0) return data
+  for (const key of keys) {
+    const val = obj[key]
+    if (ignoreUndefined && val === undefined) {
+      data[key] = val
+      continue
+    }
+    data[key] = val
+  }
+  return data
+}
