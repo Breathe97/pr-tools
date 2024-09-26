@@ -1,5 +1,5 @@
 import * as prTools from '../../src/index.js'
-import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom } from '../../src/index.js'
+import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom } from '../../src/index.js'
 
 // import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
@@ -35,9 +35,14 @@ import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom } from '..
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regExps`, str)
 }
 
+// timeStamp
+{
+  let str = timeStamp(`${new Date('2024/09/24 04:06:06').getTime()}`)
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
+}
 // timeFormat
 {
-  let str = timeFormat(`${new Date().getTime()}`, 'yyyy-mm-dd hh:MM:ss')
+  let str = timeFormat(`${new Date('2024/09/24 04:06:06').getTime()}`, 'YYYY-MM-DD hh:mm:ss')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
 }
 // timeFrom

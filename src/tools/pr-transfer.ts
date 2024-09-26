@@ -1,35 +1,57 @@
 /**
+ * 转为时间戳
+ * @param {String} dateTime 任意可转换时间 不传则默认当前时间 转换失败返回 Invalid Date
+ * @returns {Number} 数字时间戳
+ */
+
+export const timeStamp = (...args: (string | number | Date)[]): number | 'Invalid Date' => {
+  if (args.length === 0) {
+    args = [Date.now()]
+  }
+
+  const [dateTime] = args
+  let date = new Date(dateTime)
+
+  // 无效的日期格式
+  if (`${date}` === 'Invalid Date') {
+    // 尝试转为number再次转换
+    date = new Date(Number(dateTime))
+  }
+  if (`${date}` === 'Invalid Date') return 'Invalid Date'
+  return date.getTime()
+}
+
+/**
  * 格式化时间
- * @param {String} dateTime 时间戳
- * @param {String} format 默认的格式化内容 yyyy-mm-dd hh:MM:ss
+ * @param {String} dateTime 时间戳 | 标准时间
+ * @param {String} format 默认的格式化内容 YYYY-MM-DD hh:hh:ss
  * @returns {String} 格式化后的字符串
  */
-export const timeFormat = (dateTime = '', format = 'yyyy-mm-dd') => {
-  if (!dateTime) return ''
-  // 如果可以转为数字 则优先认为是时间戳
-  let timestamp = Number(dateTime)
-  let date = new Date(timestamp || dateTime)
+export const timeFormat = (dateTime: string | number | Date = '', format: string = 'YYYY-MM-DD') => {
+  const timestamp = timeStamp(dateTime) // 尝试转为数字时间戳
+
   // 无效的日期格式
-  if (`${date}` === 'Invalid Date') return dateTime
+  if (timestamp === 'Invalid Date') return dateTime
+
+  const date = new Date(timestamp)
 
   // 正常对日期的处理
-  let opt = {
-    'y+': date.getFullYear().toString(), // 年
-    'm+': (date.getMonth() + 1).toString(), // 月
-    'd+': date.getDate().toString(), // 日
-    'h+': date.getHours().toString(), // 时
-    'M+': date.getMinutes().toString(), // 分
-    's+': date.getSeconds().toString() // 秒
+  const opts = [
+    { k: 'Y+', v: `${date.getFullYear()}` }, // 年
+    { k: 'M+', v: `${date.getMonth() + 1}` }, // 月
+    { k: 'D+', v: `${date.getDate()}` }, // 日
+    { k: 'h+', v: `${date.getHours()}` }, // 时
+    { k: 'm+', v: `${date.getMinutes()}` }, // 分
+    { k: 's+', v: `${date.getSeconds()}` } // 秒
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
-  }
+  ]
+
   let ret
-  for (let k in opt) {
-    ret = new RegExp('(' + k + ')').exec(format)
+  for (let { k, v } of opts) {
+    ret = new RegExp(`(${k})`).exec(format)
     if (ret) {
       let str = ret[1]
-      // @ts-ignore
-      let k_val = opt[k]
-      let k_format = k_val.padStart(str.length, '0') // 生成替换内容 补足0位
+      let k_format = v.padStart(str.length, '0') // 生成替换内容 补足0位
       format = format.replace(str, k_format) // 替换
     }
   }
@@ -42,13 +64,11 @@ export const timeFormat = (dateTime = '', format = 'yyyy-mm-dd') => {
  * @param {String} format 默认的格式化内容 yyyy-mm-dd hh:MM:ss
  * @returns {String} 格式化后的字符串
  */
-export const timeFrom = (dateTime = '', format = 'yyyy-mm-dd') => {
-  if (!dateTime) return ''
-  // 如果可以转为数字 则优先认为是时间戳
-  let timestamp = Number(dateTime)
-  let date = new Date(timestamp || dateTime)
+export const timeFrom = (dateTime: string | number | Date, format: string = 'yyyy-mm-dd') => {
+  const timestamp = timeStamp(dateTime) // 尝试转为数字时间戳
+
   // 无效的日期格式
-  if (`${date}` === 'Invalid Date') return dateTime
+  if (timestamp === 'Invalid Date') return dateTime
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
@@ -77,7 +97,7 @@ export const timeFrom = (dateTime = '', format = 'yyyy-mm-dd') => {
           tips = Math.floor(timer / (86400 * 365)) + '年前'
         }
       } else {
-        tips = timeFormat(`${timer}`, format)
+        tips = `${timeFormat(timer, format)}`
       }
   }
   return tips
@@ -88,7 +108,7 @@ export const timeFrom = (dateTime = '', format = 'yyyy-mm-dd') => {
  * @param {ArrayBuffer} buffer arrayBuffer
  * @returns {String} 十六进制字符串
  */
-export const ab2hex = (buffer = new ArrayBuffer(0)) => {
+export const ab2hex = (buffer: ArrayBuffer = new ArrayBuffer(0)): string => {
   if (!buffer) return buffer
   const hexArr = Array.prototype.map.call(new Uint8Array(buffer), function (bit) {
     return ('00' + bit.toString(16)).slice(-2)
@@ -102,7 +122,7 @@ export const ab2hex = (buffer = new ArrayBuffer(0)) => {
  * @param {String} str 十六进制字符串
  * @returns {ArrayBuffer} buffer
  */
-export const hex2ab = (str = '') => {
+export const hex2ab = (str: string = ''): ArrayBuffer => {
   let buffer = new ArrayBuffer(str.length * 0.5)
   let dataView = new DataView(buffer)
   for (let i = 0; i < str.length; i++) {
@@ -118,7 +138,7 @@ export const hex2ab = (str = '') => {
  * @param {String} hexCharCodeStr 16进制字符串
  * @returns {String} 转换后的ASCII码
  */
-export const hex2str = (hexCharCodeStr = '') => {
+export const hex2str = (hexCharCodeStr: string = ''): string => {
   let trimedStr = hexCharCodeStr.trim()
   let rawStr = trimedStr.substr(0, 2).toLowerCase() === '0x' ? trimedStr.substr(2) : trimedStr
   let len = rawStr.length
@@ -141,7 +161,7 @@ export const hex2str = (hexCharCodeStr = '') => {
  * @param {String} str 短横线字符串
  * @returns {String} 驼峰字符串
  */
-export const line2hump = (str = '') => {
+export const line2hump = (str: string = ''): string => {
   const _str = str.replace(/\-(\w)/g, (_, letter) => {
     const new_letter = letter.toUpperCase()
     return new_letter
@@ -154,7 +174,7 @@ export const line2hump = (str = '') => {
  * @param {String} str 驼峰字符串
  * @returns {String} 短横线字符串
  */
-export const hump2line = (str = '') => {
+export const hump2line = (str: string = ''): string => {
   let _str = str.replace(/([A-Z])/g, '-$1').toLowerCase()
   // 头部横线
   const isGreat = _str.slice(0, 1) === '-'
@@ -170,7 +190,7 @@ export const hump2line = (str = '') => {
  * @param {String} str 字符串
  * @returns {String} 结果字符串
  */
-export const delSpaces = (str = '') => {
+export const delSpaces = (str: string = ''): string => {
   return str.replace(/(^\s*)|(\s*$)/g, '')
 }
 
@@ -179,6 +199,6 @@ export const delSpaces = (str = '') => {
  * @param {Number} offset 校准小时
  * @returns {Number} timestamp 13位时间戳
  */
-export const getTime = (offset = 0) => {
+export const getTime = (offset: number = 0): number => {
   return new Date().getTime() + 1000 * 60 * 60 * offset // + 8小时
 }
