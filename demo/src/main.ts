@@ -37,17 +37,17 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
 
 // timeStamp
 {
-  let str = timeStamp(`${new Date('2024/09/24 04:06:06').getTime()}`)
+  let str = timeStamp('2024/09/24 04:06:06')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
 }
 // timeFormat
 {
-  let str = timeFormat(`${new Date('2024/09/24 04:06:06').getTime()}`, 'YYYY-MM-DD hh:mm:ss')
+  let str = timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
 }
 // timeFrom
 {
-  let str = timeFrom(`${new Date().getTime() - 5600000}`)
+  let str = timeFrom(new Date().getTime() - 5600000)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFrom`, str)
 }
 // line2hump

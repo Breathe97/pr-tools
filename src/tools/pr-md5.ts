@@ -112,10 +112,10 @@ let uTF8Encode = (string) => {
 
 /**
  * 对字符串进行md5加密
- * @param {String} string 需要加密的字符串
- * @returns {String} 加密后的字符串
+ * @param _string 需要加密的字符串
+ * @returns 加密后的字符串
  */
-export const md5 = (string = '') => {
+export const md5 = (_string = '') => {
   let x = Array()
   let k, AA, BB, CC, DD, a, b, c, d
   let S11 = 7,

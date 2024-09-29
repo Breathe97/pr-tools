@@ -1,37 +1,32 @@
 /**
- * 转为时间戳
- * @param {String} dateTime 任意可转换时间 不传则默认当前时间 转换失败返回 Invalid Date
- * @returns {Number} 数字时间戳
+ * 时间戳 失败返回 0
+ * @param _val Date | number | string
+ * @example timeStamp()
+ * @example timeStamp(new Date())
+ * @example timeStamp(1727550913097)
+ * @example timeStamp('2024')
+ * @returns 转换后的时间戳 | 0
  */
+export const timeStamp = (_val?: Date | number | string) => {
+  // 尝试转为数字
+  const timestamp = Number(_val)
+  if (!isNaN(timestamp)) return timestamp
 
-export const timeStamp = (...args: (string | number | Date)[]): number | 'Invalid Date' => {
-  if (args.length === 0) {
-    args = [Date.now()]
-  }
-
-  const [dateTime] = args
-  let date = new Date(dateTime)
-
-  // 无效的日期格式
-  if (`${date}` === 'Invalid Date') {
-    // 尝试转为number再次转换
-    date = new Date(Number(dateTime))
-  }
-  if (`${date}` === 'Invalid Date') return 'Invalid Date'
-  return date.getTime()
+  // 尝试转为标准时间
+  const date = new Date(`${_val}`)
+  if (date.getTime) return date.getTime()
+  return 0
 }
 
 /**
  * 格式化时间
- * @param {String} dateTime 时间戳 | 标准时间
- * @param {String} format 默认的格式化内容 YYYY-MM-DD hh:hh:ss
- * @returns {String} 格式化后的字符串
+ * @param _val Date | number | string
+ * @param format 格式化模板 YYYY-MM-DD hh:hh:ss
+ * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
+ * @returns 格式化后的字符串
  */
-export const timeFormat = (dateTime: string | number | Date = '', format: string = 'YYYY-MM-DD') => {
-  const timestamp = timeStamp(dateTime) // 尝试转为数字时间戳
-
-  // 无效的日期格式
-  if (timestamp === 'Invalid Date') return dateTime
+export const timeFormat = (_val?: Date | number | string, format: string = 'YYYY-MM-DD'): string => {
+  const timestamp = timeStamp(_val) // 尝试转为数字时间戳
 
   const date = new Date(timestamp)
 
@@ -60,15 +55,13 @@ export const timeFormat = (dateTime: string | number | Date = '', format: string
 
 /**
  * 格式化时间
- * @param {String} dateTime 时间戳
- * @param {String} format 默认的格式化内容 yyyy-mm-dd hh:MM:ss
- * @returns {String} 格式化后的字符串
+ * @param _val Date | number | string
+ * @param format 格式化模板 YYYY-MM-DD hh:hh:ss
+ * @example timeFrom(new Date().getTime() - 5600000)
+ * @returns 格式化后的字符串
  */
-export const timeFrom = (dateTime: string | number | Date, format: string = 'yyyy-mm-dd') => {
-  const timestamp = timeStamp(dateTime) // 尝试转为数字时间戳
-
-  // 无效的日期格式
-  if (timestamp === 'Invalid Date') return dateTime
+export const timeFrom = (_val?: Date | number | string, format: string = 'yyyy-mm-dd'): string => {
+  const timestamp = timeStamp(_val) // 尝试转为数字时间戳
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
@@ -105,29 +98,28 @@ export const timeFrom = (dateTime: string | number | Date, format: string = 'yyy
 
 /**
  * ArrayBuffer转十六进制
- * @param {ArrayBuffer} buffer arrayBuffer
- * @returns {String} 十六进制字符串
+ * @param _buffer arrayBuffer
+ * @returns 十六进制字符串
  */
-export const ab2hex = (buffer: ArrayBuffer = new ArrayBuffer(0)): string => {
-  if (!buffer) return buffer
-  const hexArr = Array.prototype.map.call(new Uint8Array(buffer), function (bit) {
+export const ab2hex = (_buffer: ArrayBuffer = new ArrayBuffer(0)): string => {
+  if (!_buffer) return _buffer
+  const hexArr = Array.prototype.map.call(new Uint8Array(_buffer), function (bit) {
     return ('00' + bit.toString(16)).slice(-2)
   })
-  // console.log(hexArr.join(''))
   return hexArr.join('').toUpperCase()
 }
 
 /**
  * 十六进制转ArrayBuffer
- * @param {String} str 十六进制字符串
- * @returns {ArrayBuffer} buffer
+ * @param _str 十六进制字符串
+ * @returns buffer
  */
-export const hex2ab = (str: string = ''): ArrayBuffer => {
-  let buffer = new ArrayBuffer(str.length * 0.5)
+export const hex2ab = (_str: string = ''): ArrayBuffer => {
+  let buffer = new ArrayBuffer(_str.length * 0.5)
   let dataView = new DataView(buffer)
-  for (let i = 0; i < str.length; i++) {
+  for (let i = 0; i < _str.length; i++) {
     if (i % 2 === 0) {
-      dataView.setUint8(i * 0.5, parseInt(str.slice(i, i + 2), 16))
+      dataView.setUint8(i * 0.5, parseInt(_str.slice(i, i + 2), 16))
     }
   }
   return buffer
@@ -135,11 +127,11 @@ export const hex2ab = (str: string = ''): ArrayBuffer => {
 
 /**
  * 十六进制转ASCII码
- * @param {String} hexCharCodeStr 16进制字符串
- * @returns {String} 转换后的ASCII码
+ * @param _hexCharCodeStr 16进制字符串
+ * @returns 转换后的ASCII码
  */
-export const hex2str = (hexCharCodeStr: string = ''): string => {
-  let trimedStr = hexCharCodeStr.trim()
+export const hex2str = (_hexCharCodeStr: string = ''): string => {
+  let trimedStr = _hexCharCodeStr.trim()
   let rawStr = trimedStr.substr(0, 2).toLowerCase() === '0x' ? trimedStr.substr(2) : trimedStr
   let len = rawStr.length
   if (len % 2 !== 0) {
@@ -152,53 +144,52 @@ export const hex2str = (hexCharCodeStr: string = ''): string => {
     curCharCode = parseInt(rawStr.substr(i, 2), 16)
     resultStr.push(String.fromCharCode(curCharCode))
   }
-  // console.log(hexCharCodeStr, trimedStr, rawStr, resultStr.join(''))
   return resultStr.join('')
 }
 
 /**
  * 短划线转换驼峰
- * @param {String} str 短横线字符串
- * @returns {String} 驼峰字符串
+ * @param _str 短横线字符串
+ * @returns 驼峰字符串
  */
-export const line2hump = (str: string = ''): string => {
-  const _str = str.replace(/\-(\w)/g, (_, letter) => {
+export const line2hump = (_str: string = ''): string => {
+  const str = _str.replace(/\-(\w)/g, (_, letter) => {
     const new_letter = letter.toUpperCase()
     return new_letter
   })
-  return _str
+  return str
 }
 
 /**
  * 驼峰转换短横线
- * @param {String} str 驼峰字符串
- * @returns {String} 短横线字符串
+ * @param _str 驼峰字符串
+ * @returns 短横线字符串
  */
-export const hump2line = (str: string = ''): string => {
-  let _str = str.replace(/([A-Z])/g, '-$1').toLowerCase()
+export const hump2line = (_str: string = ''): string => {
+  let str = _str.replace(/([A-Z])/g, '-$1').toLowerCase()
   // 头部横线
-  const isGreat = _str.slice(0, 1) === '-'
+  const isGreat = str.slice(0, 1) === '-'
   if (isGreat) {
-    _str = _str.replace('-', '')
+    str = str.replace('-', '')
   }
 
-  return _str
+  return str
 }
 
 /**
  * 去除首尾空格
- * @param {String} str 字符串
- * @returns {String} 结果字符串
+ * @param _str 字符串
+ * @returns 结果字符串
  */
-export const delSpaces = (str: string = ''): string => {
-  return str.replace(/(^\s*)|(\s*$)/g, '')
+export const delSpaces = (_str: string = ''): string => {
+  return _str.replace(/(^\s*)|(\s*$)/g, '')
 }
 
 /**
  * 获取校准后的当前时间时间戳
- * @param {Number} offset 校准小时
- * @returns {Number} timestamp 13位时间戳
+ * @param _offset 校准小时
+ * @returns timestamp 13位时间戳
  */
-export const getTime = (offset: number = 0): number => {
-  return new Date().getTime() + 1000 * 60 * 60 * offset // + 8小时
+export const getTime = (_offset: number = 0): number => {
+  return new Date().getTime() + 1000 * 60 * 60 * _offset // + 8小时
 }
