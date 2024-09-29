@@ -134,8 +134,8 @@ export const md5 = (_string = '') => {
     S42 = 10,
     S43 = 15,
     S44 = 21
-  string = uTF8Encode(string)
-  x = convertToWordArray(string)
+  _string = uTF8Encode(_string)
+  x = convertToWordArray(_string)
   a = 0x67452301
   b = 0xefcdab89
   c = 0x98badcfe
