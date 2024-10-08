@@ -21,11 +21,11 @@ export const timeStamp = (_val?: Date | number | string) => {
 /**
  * 格式化时间
  * @param _val Date | number | string
- * @param format 格式化模板 YYYY-MM-DD hh:hh:ss
+ * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
  */
-export const timeFormat = (_val?: Date | number | string, format: string = 'YYYY-MM-DD'): string => {
+export const timeFormat = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD'): string => {
   const timestamp = timeStamp(_val) // 尝试转为数字时间戳
 
   const date = new Date(timestamp)
@@ -43,24 +43,24 @@ export const timeFormat = (_val?: Date | number | string, format: string = 'YYYY
 
   let ret
   for (let { k, v } of opts) {
-    ret = new RegExp(`(${k})`).exec(format)
+    ret = new RegExp(`(${k})`).exec(_format)
     if (ret) {
       let str = ret[1]
       let k_format = v.padStart(str.length, '0') // 生成替换内容 补足0位
-      format = format.replace(str, k_format) // 替换
+      _format = _format.replace(str, k_format) // 替换
     }
   }
-  return format
+  return _format
 }
 
 /**
- * 格式化时间
+ * 多久之前时间
  * @param _val Date | number | string
- * @param format 格式化模板 YYYY-MM-DD hh:hh:ss
+ * @param format 格式化模板 YYYY-MM-DD hh:mm:ss
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: Date | number | string, format: string = 'yyyy-mm-dd'): string => {
+export const timeFrom = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD'): string => {
   const timestamp = timeStamp(_val) // 尝试转为数字时间戳
 
   // 如果要优先处理为 多久之前
@@ -83,14 +83,14 @@ export const timeFrom = (_val?: Date | number | string, format: string = 'yyyy-m
       break
     default:
       // 如果format为false，则无论什么时间戳，都显示xx之前
-      if (!format) {
+      if (!_format) {
         if (timer >= 2592000 && timer < 365 * 86400) {
           tips = Math.floor(timer / (86400 * 30)) + '个月前'
         } else {
           tips = Math.floor(timer / (86400 * 365)) + '年前'
         }
       } else {
-        tips = `${timeFormat(timer, format)}`
+        tips = `${timeFormat(timer, _format)}`
       }
   }
   return tips
