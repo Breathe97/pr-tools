@@ -150,7 +150,7 @@ export const getArrRange = (_arr = [], _accuracy = 10) => {
  * @param _ignoreUndefined 是否忽略值为undefined的字段 默认为true
  * @returns {} 筛选后的对象
  */
-export const filter_Keys = <T extends { [key: string]: unknown }>(_obj: T, _keys: (keyof T)[] = [], _ignoreUndefined = true): { [key: string]: unknown } => {
+export const filterKeys = <T extends { [key: string]: unknown }>(_obj: T, _keys: (keyof T)[] = [], _ignoreUndefined = true): { [key: string]: unknown } => {
   let data: any = {}
   if (_keys.length === 0) return data
   for (const key of _keys) {
