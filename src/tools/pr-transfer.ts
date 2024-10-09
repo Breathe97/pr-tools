@@ -193,3 +193,21 @@ export const delSpaces = (_str: string = ''): string => {
 export const getTime = (_offset: number = 0): number => {
   return new Date().getTime() + 1000 * 60 * 60 * _offset // + 8小时
 }
+
+/**
+ * 字节单位转换
+ * @param _bytes 字节
+ * @returns 格式化后的字符串
+ */
+
+export const bytesFormat = (_bytes: number): string => {
+  const units = ['KB', 'MB', 'GB', 'TB']
+  let unit = 'B'
+  let num = _bytes
+  for (const key of units) {
+    unit = key
+    num = num / 1024
+    if (num < 1024) break
+  }
+  return `${num.toFixed(2)}${unit}`
+}
