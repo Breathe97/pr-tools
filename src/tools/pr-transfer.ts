@@ -1,14 +1,14 @@
 /**
  * 时间戳 失败返回 0
  * @param _val Date | number | string
- * @param _offset 协调世界时（UTC）相对于当前时区的时间差值，单位为分钟 默认为中国时区 +480
+ * @param _offset 协调世界时（UTC）相对于当前时区的时间差值，单位为分钟 默认为0 ,中国时区 +480
  * @example timeStamp()
  * @example timeStamp(new Date(), 480)
  * @example timeStamp(1727550913097, 480)
  * @example timeStamp('2024', 480)
  * @returns 转换后的时间戳 | 0
  */
-export const timeStamp = (_val?: Date | number | string, _offset: number = 480) => {
+export const timeStamp = (_val?: Date | number | string, _offset: number = 0) => {
   try {
     // 尝试转为数字
     let timestamp = Number(_val)
@@ -19,7 +19,7 @@ export const timeStamp = (_val?: Date | number | string, _offset: number = 480) 
       if (`${date}` === 'Invalid Date') return 0
       timestamp = date.getTime() // 当前计算机的 UTC 时间戳
     }
-    const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差 -480
+    const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差
     timestamp = timestamp - (timezoneOffset + _offset) * 60 * 1000
     return timestamp
   } catch (error) {
