@@ -1,21 +1,31 @@
 /**
  * 时间戳 失败返回 0
  * @param _val Date | number | string
+ * @param _offset 协调世界时（UTC）相对于当前时区的时间差值，单位为分钟 默认为中国时区 +480
  * @example timeStamp()
- * @example timeStamp(new Date())
- * @example timeStamp(1727550913097)
- * @example timeStamp('2024')
+ * @example timeStamp(new Date(), 480)
+ * @example timeStamp(1727550913097, 480)
+ * @example timeStamp('2024', 480)
  * @returns 转换后的时间戳 | 0
  */
-export const timeStamp = (_val?: Date | number | string) => {
-  // 尝试转为数字
-  const timestamp = Number(_val)
-  if (!isNaN(timestamp)) return timestamp
+export const timeStamp = (_val?: Date | number | string, _offset: number = 480) => {
+  try {
+    // 尝试转为数字
+    let timestamp = Number(_val)
 
-  // 尝试转为标准时间
-  const date = new Date(`${_val}`)
-  if (date.getTime) return date.getTime()
-  return 0
+    // 如果不是数字 尝试转为标准时间 并获取时间戳
+    if (isNaN(timestamp)) {
+      const date = new Date(`${_val}`)
+      if (`${date}` === 'Invalid Date') return 0
+      timestamp = date.getTime() // 当前计算机的 UTC 时间戳
+    }
+    const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差 -480
+    timestamp = timestamp - (timezoneOffset + _offset) * 60 * 1000
+    return timestamp
+  } catch (error) {
+    console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->timeStamp:err`, { _val, _offset, error })
+    return 0
+  }
 }
 
 /**
@@ -186,21 +196,13 @@ export const delSpaces = (_str: string = ''): string => {
 }
 
 /**
- * 获取校准后的当前时间时间戳
- * @param _offset 校准小时
- * @returns timestamp 13位时间戳
- */
-export const getTime = (_offset: number = 0): number => {
-  return new Date().getTime() + 1000 * 60 * 60 * _offset // + 8小时
-}
-
-/**
  * 字节单位转换
  * @param _bytes 字节
+ * @param _splitStr 值与单位的分割符 默认为一个空格
  * @returns 格式化后的字符串
  */
 
-export const bytesFormat = (_bytes: number): string => {
+export const bytesFormat = (_bytes: number, _splitStr = ' '): string => {
   const units = ['KB', 'MB', 'GB', 'TB']
   let unit = 'B'
   let num = _bytes
@@ -209,5 +211,5 @@ export const bytesFormat = (_bytes: number): string => {
     num = num / 1024
     if (num < 1024) break
   }
-  return `${num.toFixed(2)}${unit}`
+  return `${num.toFixed(2)}${_splitStr}${unit}`
 }
