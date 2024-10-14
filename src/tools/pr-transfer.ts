@@ -19,8 +19,10 @@ export const timeStamp = (_val?: Date | number | string, _offset: number = 0) =>
       if (`${date}` === 'Invalid Date') return 0
       timestamp = date.getTime() // 当前计算机的 UTC 时间戳
     }
-    const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差
-    timestamp = timestamp - (timezoneOffset + _offset) * 60 * 1000
+    if (_offset) {
+      const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差
+      timestamp = timestamp - (timezoneOffset + _offset) * 60 * 1000
+    }
     return timestamp
   } catch (error) {
     console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->timeStamp:err`, { _val, _offset, error })
