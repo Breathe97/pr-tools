@@ -10,12 +10,11 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
 // uuid
 {
   let str = uuid(32, 16)
-  prTools.uuid()
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
 }
 {
   // random
-  let str = random(-1, 999999) // 6位数字
+  let str = random(99999, 999999) // 6位数字
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
 }
 {
@@ -37,7 +36,8 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
 
 // timeStamp
 {
-  let str = timeStamp('2024/09/24 04:06:06')
+  // let str = timeStamp('2024/09/24 04:06:06', 480) // 获取中国时间
+  let str = timeStamp('2024/09/24 04:06:06', 0) // 获取目标时间的 utc 时间戳
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
 }
 // timeFormat

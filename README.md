@@ -20,20 +20,25 @@ import * as prTools from 'pr-tools'
 #### 常用函数
 
 ```js
+// uuid
 {
-  // uuid
-  let str = uuid(16, 16) // 长度 进制
+  let str = uuid(32, 16)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
 }
 {
   // random
-  let str = random(100000, 999999) // 6位数字
+  let str = random(99999, 999999) // 6位数字
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
 }
 {
   // randomName
-  let str = randomName(1, 4) // 1-4位昵称
+  let str = randomName(2, 4) // 2-4位昵称
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
+}
+// md5
+{
+  let str = md5('123456')
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:md5`, str)
 }
 ```
 
@@ -50,8 +55,8 @@ import * as prTools from 'pr-tools'
 
 ```js
 {
-  let str = regTest.mobile.test('22')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regTest`, str)
+  let str = regExps.mobile.test('222')
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regExps`, str)
 }
 
 // 其他正则
@@ -126,35 +131,41 @@ export const regExps = {
    */
   landline: new RegExp(/^\d{3,4}-\d{7,8}(-\d{3,4})?$/)
 }
+
 ```
 
 #### transfer 转换
 
 ```js
-// timeFormat 格式化时间
+// timeStamp
 {
-  let str = timeFormat(new Date().getTime(), 'yyyy-mm-dd hh:MM:ss')
+  // let str = timeStamp('2024/09/24 04:06:06', 480) // 获取中国时间
+  let str = timeStamp('2024/09/24 04:06:06', 0) // 获取目标时间的 utc 时间戳
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
+}
+// timeFormat
+{
+  let str = timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
 }
-// timeFrom 格式化时间 多久之前
+// timeFrom
 {
   let str = timeFrom(new Date().getTime() - 5600000)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFrom`, str)
 }
-// line2hump 短横线转小驼峰
+// line2hump
 {
-  let str = prTools.line2hump('line-hump')
+  let str = prTools.line2hump('asd-daa')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:line2hump`, str)
 }
-// hump2line 小驼峰转短横线
+// hump2line
 {
-  let str = prTools.hump2line('lineHump')
+  let str = prTools.hump2line('AddaDdd')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:hump2line`, str)
 }
-// delSpaces 去除首尾空格
 {
-  let str = prTools.delSpaces('  del spaces  ')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:delSpaces`, str)
+  let res = prTools.bytesFormat(22222)
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }
 ```
 

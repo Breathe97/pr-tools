@@ -1,46 +1,41 @@
 /**
- * 随机生成uuid
- * @param _len 长度
- * @param _radix 进制
- * @returns 随机uuid
- */
-export const uuid = (_len: number = 32, _radix: 2 | 10 | 16 = 16) => {
-  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-  let uuid: string[] = [],
-    i
-  _radix = _radix || chars.length
-  if (_len) {
-    // Compact form
-    for (i = 0; i < _len; i++) uuid[i] = chars[0 | (Math.random() * _radix)]
-  } else {
-    // rfc4122, version 4 form
-    let r
-    // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
-    uuid[14] = '4'
-    // Fill in random data.  At i==19 set the high bits of clock sequence as
-    // per rfc4122, sec. 4.1.5
-    for (i = 0; i < 36; i++) {
-      if (!uuid[i]) {
-        r = 0 | (Math.random() * 16)
-        uuid[i] = chars[i == 19 ? (r & 0x3) | 0x8 : r]
-      }
-    }
-  }
-  return uuid.join('')
-}
-
-/**
  * 随机生成区间数字
  * @param _min 最小数字（大于等于0）
  * @param _max 最大数字（大于等于1）
  * @returns 随机区间数字
  */
 export const random = (_min = 0, _max = 1) => {
-  _min = Math.max(0, _min)
-  _max = Math.max(1, _max)
-  let num = Math.random() * (_max - _min + 1) + _min
+  const min = Math.max(0, _min)
+  const max = Math.max(1, _max)
+  let num = Math.random() * (max - min + 1) + min
   return parseInt(`${num}`, 10)
+}
+
+/**
+ * 随机生成uuid
+ * @param _len 长度
+ * @param _radix 进制 为了保证唯一性 进制过低时会 按照最低长度返回
+ * @returns 随机uuid
+ */
+export const uuid = (_len: number = 16, _radix: number = 16) => {
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+  const radix = Math.min(chars.length, _radix) // 最大进制
+  const now = Date.now() // 13位时间戳
+
+  const str = now.toString(radix)
+  const uuid: string[] = str.split('')
+
+  // 最少的长度
+  const len = Math.max(4, _len - str.length)
+
+  // 根据所需进制对uuid进行补位
+  for (let i = 0; i < len; i++) {
+    const randomIndex = random(0, radix - 1)
+    const v = chars[randomIndex]
+    uuid.push(v)
+  }
+
+  return uuid.join('').toUpperCase()
 }
 
 /**
@@ -51,10 +46,10 @@ export const random = (_min = 0, _max = 1) => {
  */
 const mameStr = '徒靡绪风颢阳曜灵越扶应图町歧蜀魄漠泊穆皇星霜云今在兮译文欲行予墨青来上卿思贤望古子吟知有易寒非梦居然念唐致远听贤约书何夕北歌清川明庭之恒景行景湛清如问渠凌洲鸣珂彬蔚溯光广思南风到源至诚天诚归远知许沅芷澹雅池雨相宜漪涵遥清易安灵均梦西若云何君远山鹤扬亦河柳新雨晴盛晨惊鸿亦安阑梦如初一心亦行与谐凤兮夕照梧秋思悠得安清秋悠然钟秀冉竹如是喻新弦思月人青时望舒心素桑瑜暄和婉晚芊眠素晚穆沐霜秋'
 export const randomName = (_min = 1, _max = 1) => {
-  _min = Math.max(1, _min)
-  _max = Math.max(1, _max)
-  let startIndex = random(1, mameStr.length - (_max - _min))
-  let endIndex = startIndex + random(_min, _max)
+  const min = Math.max(1, _min)
+  const max = Math.max(1, _max)
+  let startIndex = random(1, mameStr.length - (max - min))
+  let endIndex = startIndex + random(min, max)
   let str = mameStr.slice(startIndex, endIndex)
   return str
 }
