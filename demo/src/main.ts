@@ -22,6 +22,24 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
   let str = randomName(2, 4) // 2-4位昵称
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
 }
+// filterKeys
+{
+  const obj = { name: 'a', age: 10, phone: 22, 1: 3, '2': 44 }
+  let res = prTools.filterKeys(obj, ['phone', 'age', 1])
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+}
+
+// arrFilterDup
+{
+  const arr = [
+    { name: 'a', age: 10, phone: 123 },
+    { name: 'b', age: 12, phone: 456 },
+    { name: 'c', age: 10, phone: 789 }
+  ]
+  let res = prTools.arrFilterDup(arr, ['age'], true)
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+}
+
 // md5
 {
   let str = md5('123456')
@@ -60,21 +78,8 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
   let str = prTools.hump2line('AddaDdd')
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:hump2line`, str)
 }
+// bytesFormat
 {
   let res = prTools.bytesFormat(22222)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
-
-{
-  let arr = [
-    { name: 'a', age: 10, phone: 22 },
-    { name: 'b', age: 10, phone: 22 },
-    { name: 'a', age: 22, phone: 44, func: () => arr }
-  ]
-
-  const keys = ['name', 'age', 'a', 'func', '22']
-
-  let res = prTools.arrFilterDup([[22]], keys)
-  // res = prTools.filterKeys(arr[0], [])
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }

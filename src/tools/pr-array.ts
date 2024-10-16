@@ -59,7 +59,7 @@ export const arrRange = (_arr = [], _accuracy = 10) => {
  * @example arrFilterDup(arr, ['name', 'age'])
  * @returns 去重后的数组
  */
-export const arrFilterDup = <T extends { [key: string]: unknown }>(_arr: T[], _keys: Array<keyof T> = [], _cover = true) => {
+export const arrFilterDup = <T extends Record<string, unknown>, K extends keyof T>(_arr: T[], _keys: K[] = [], _cover = true): T[] => {
   const map = new Map()!
   for (const obj of _arr) {
     let key = 'map'

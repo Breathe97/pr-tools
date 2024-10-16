@@ -60,20 +60,19 @@ export const randomName = (_min = 1, _max = 1) => {
 /**
  * 筛选对象中指定的key
  * @param _obj 需要筛选的对象
- * @param _keys 需要哪些字段
- * @param _ignoreUndefined 是否忽略值为 undefined 的字段 默认为 false 会生成对应的 [key]: undefined
+ * @param _keys 需要筛选哪些字段
  * @returns {} 筛选后的对象
  */
-export const filterKeys = <T extends { [key: string]: unknown }>(_obj: T, _keys: Array<keyof T> = [], _ignoreUndefined = false): Obj => {
-  let data: any = {}
-  if (_keys.length === 0) return data
-  for (const key of _keys) {
-    const val = _obj[key]
-    if (_ignoreUndefined && val === undefined) {
-      data[key] = val
-      continue
+
+export const filterKeys = <T extends Record<string, unknown>, K extends keyof T>(_obj: T, _keys: K[] = []): Record<K, unknown> => {
+  const obj = { ..._obj }
+  const keys = Object.keys(obj)
+  for (const key of keys) {
+    const index = _keys.findIndex((_key) => String(_key) === key)
+    // 需要删除
+    if (index === -1) {
+      delete obj[key]
     }
-    data[key] = val
   }
-  return data
+  return obj
 }
