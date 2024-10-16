@@ -64,3 +64,17 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
   let res = prTools.bytesFormat(22222)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }
+
+{
+  let arr = [
+    { name: 'a', age: 10, phone: 22 },
+    { name: 'b', age: 10, phone: 22 },
+    { name: 'a', age: 22, phone: 44, func: () => arr }
+  ]
+
+  const keys = ['name', 'age', 'a', 'func', '22']
+
+  let res = prTools.arrFilterDup([[22]], keys)
+  // res = prTools.filterKeys(arr[0], [])
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+}
