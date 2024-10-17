@@ -1,12 +1,11 @@
 /**
- * 获取时间戳 失败返回 0
+ * 修正时间戳 失败返回 0
  * @param _val Date | number | string
  * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
- * @example timeStamp()
- * @example timeStamp(1727550913097, 480)
+ * @example offsetTimeStamp(1727550913097, 480)
  * @returns 转换后的时间戳 | 0
  */
-export const timeStamp = (_val?: Date | number | string, _offset?: number) => {
+export const offsetTimeStamp = (_val?: Date | number | string, _offset?: number) => {
   try {
     // 尝试转为数字
     let timestamp = Number(_val)

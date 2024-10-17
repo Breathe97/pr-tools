@@ -1,4 +1,13 @@
-import { timeStamp } from '../tools/index'
+import { offsetTimeStamp } from '../tools/index'
+
+/**
+ * 获取时间戳 失败返回 0
+ * @param _val Date | number | string
+ * @example timeStamp()
+ * @example timeStamp('2024-05-23')
+ * @returns 转换后的时间戳 | 0
+ */
+export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val)
 
 /**
  * 格式化时间
@@ -9,7 +18,7 @@ import { timeStamp } from '../tools/index'
  * @returns 格式化后的字符串
  */
 export const timeFormat = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
-  const timestamp = timeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+  const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   const date = new Date(timestamp)
 
@@ -45,7 +54,7 @@ export const timeFormat = (_val?: Date | number | string, _format: string = 'YYY
  * @returns 格式化后的字符串
  */
 export const timeFrom = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
-  const timestamp = timeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+  const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
