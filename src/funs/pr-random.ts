@@ -56,23 +56,3 @@ export const randomName = (_min = 1, _max = 1) => {
   let str = mameStr.slice(startIndex, endIndex)
   return str
 }
-
-/**
- * 筛选对象中指定的key
- * @param _obj 需要筛选的对象
- * @param _keys 需要筛选哪些字段
- * @returns {} 筛选后的对象
- */
-
-export const filterKeys = <T extends Record<string, unknown>, K extends keyof T>(_obj: T, _keys: K[] = []): Record<K, unknown> => {
-  const obj = { ..._obj }
-  const keys = Object.keys(obj)
-  for (const key of keys) {
-    const index = _keys.findIndex((_key) => String(_key) === key)
-    // 需要删除
-    if (index === -1) {
-      delete obj[key]
-    }
-  }
-  return obj
-}

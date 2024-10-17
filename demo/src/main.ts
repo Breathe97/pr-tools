@@ -1,5 +1,5 @@
 import * as prTools from '../../src/index.js'
-import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom } from '../../src/index.js'
+import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom } from '../../src/index.js'
 
 // import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
@@ -52,12 +52,6 @@ import { uuid, random, randomName, md5, regExps, timeStamp, timeFormat, timeFrom
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regExps`, str)
 }
 
-// timeStamp
-{
-  // let str = timeStamp('2024/09/24 04:06:06', 480) // 获取中国时间
-  let str = timeStamp('2024/09/24 04:06:06', 0) // 获取目标时间的 utc 时间戳
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
-}
 // timeFormat
 {
   let str = timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')

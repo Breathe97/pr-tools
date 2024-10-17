@@ -1,44 +1,15 @@
-/**
- * 时间戳 失败返回 0
- * @param _val Date | number | string
- * @param _offset 协调世界时（UTC）相对于当前时区的时间差值，单位为分钟
- * @example timeStamp()
- * @example timeStamp(1727550913097, 480)
- * @returns 转换后的时间戳 | 0
- */
-export const timeStamp = (_val?: Date | number | string, _offset?: number) => {
-  try {
-    // 尝试转为数字
-    let timestamp = Number(_val)
-
-    // 如果不是数字 尝试转为标准时间 并获取时间戳
-    if (isNaN(timestamp)) {
-      const date = new Date(`${_val}`)
-      if (`${date}` === 'Invalid Date') return 0
-      timestamp = date.getTime()
-    }
-
-    // 传入时区差
-    if (_offset !== undefined) {
-      const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差 例如 中国为 -480 传入 _offset = 480 的时候先纠正到0时区 再 + _offset
-      timestamp += (timezoneOffset + _offset) * 60 * 1000
-    }
-    return timestamp
-  } catch (error) {
-    console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->timeStamp:err`, { _val, _offset, error })
-    return 0
-  }
-}
+import { timeStamp } from '../tools/index'
 
 /**
  * 格式化时间
  * @param _val Date | number | string
  * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
+ * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
  */
-export const timeFormat = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD'): string => {
-  const timestamp = timeStamp(_val) // 尝试转为数字时间戳
+export const timeFormat = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
+  const timestamp = timeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   const date = new Date(timestamp)
 
@@ -69,11 +40,12 @@ export const timeFormat = (_val?: Date | number | string, _format: string = 'YYY
  * 多久之前时间
  * @param _val Date | number | string
  * @param format 格式化模板 YYYY-MM-DD hh:mm:ss
+ * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD'): string => {
-  const timestamp = timeStamp(_val) // 尝试转为数字时间戳
+export const timeFrom = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
+  const timestamp = timeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
