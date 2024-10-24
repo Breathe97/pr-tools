@@ -1,0 +1,17 @@
+
+GET https://api.pryun.vip/users-get?page=10 HTTP/1.1
+token: pryun
+
+
+###
+
+POST https://api.pryun.vip/qrcode-post
+content-type: application/json
+token: pryun
+
+{
+  "mode": "USER",
+  "text": "60dee98ccfbd2e27d0b053e7"
+}
+
+###

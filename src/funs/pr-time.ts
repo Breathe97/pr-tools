@@ -14,11 +14,14 @@ export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val
  * @param _val Date | number | string
  * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
  * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
+ * @param _emptyStr 占位符 格式化失败显示的内容 默认为 -
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
  */
-export const timeFormat = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
+export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD', _offset?: number, _emptyStr: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+
+  if (isNaN(_val) && timestamp === 0) return _emptyStr // 错误时间
 
   const date = new Date(timestamp)
 
@@ -50,11 +53,14 @@ export const timeFormat = (_val?: Date | number | string, _format: string = 'YYY
  * @param _val Date | number | string
  * @param format 格式化模板 YYYY-MM-DD hh:mm:ss
  * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
+ * @param _emptyStr 占位符 格式化失败显示的内容 默认为 -
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: Date | number | string, _format: string = 'YYYY-MM-DD', _offset?: number): string => {
+export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD', _offset?: number, _emptyStr: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+
+  if (isNaN(_val) && timestamp === 0) return _emptyStr // 错误时间
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
