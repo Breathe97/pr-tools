@@ -138,12 +138,13 @@ export const num2split = (_number: number | string): string => {
 }
 
 /**
- * 筛选对象中指定的key
- * @param _obj 需要筛选的对象
+ * 筛选 对象 中指定的key
+ * @param _obj 需要筛选的 对象
  * @param _keys 需要筛选哪些字段
- * @returns {} 筛选后的对象
+ * @example filterKeys(_obj, ['lable', 'name'])
+ * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
  */
-export const filterKeys = <T extends Record<string | number, any>, K extends keyof T>(_obj: T, _keys: K[] = []): Record<K, unknown> => {
+export const filterKeys = <T extends Record<string | number, any>, K extends keyof T>(_obj: T, _keys: K[] = []) => {
   const obj = { ..._obj }
   const keys = Object.keys(obj)
   for (const key of keys) {

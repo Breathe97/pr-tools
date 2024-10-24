@@ -1,3 +1,4 @@
+import { filterKeys } from './pr-transfer'
 /**
  * 把一纬数组按指定长度分割
  * @param _arr 一纬数组
@@ -67,7 +68,6 @@ export const arrFilterDup = <T extends Record<string | number, any>, K extends k
       key += `-${obj[_key]}`
     }
     const has = map.has(key)
-
     if (!has) {
       map.set(key, obj)
       continue
@@ -79,5 +79,38 @@ export const arrFilterDup = <T extends Record<string | number, any>, K extends k
   }
   const values = map.entries()
   const arr = Array.from(values, ([_, value]) => value)
+  return arr
+}
+
+/**
+ * 筛选 数组对象 中指定的key
+ * @param _arr 需要筛选的对象数组
+ * @param _keys 需要筛选哪些字段
+ * @example arrFilterKeys(arr, ['lable', 'name'])
+ * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
+ */
+export const arrFilterKeys = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _keys: K[] = []) => {
+  const arr = []
+  for (const _obj of _arr) {
+    const obj = filterKeys(_obj, _keys)
+    arr.push(obj)
+  }
+  return arr
+}
+
+export const arrFromEnum = <T extends Record<string | number, any>, K extends string | number, V extends string | number>(_enum: T, _key_name = 'lable' as K, _val_name = 'value' as V) => {
+  type Obj = {
+    [key in K | V | 'lable' | 'value']: any
+  }
+  const arr = []
+  const items = Object.entries(_enum)
+  for (const [key, val] of items) {
+    const obj = {
+      [_key_name]: key,
+      [_val_name]: val
+    } as Obj
+    arr.push(obj)
+  }
+
   return arr
 }
