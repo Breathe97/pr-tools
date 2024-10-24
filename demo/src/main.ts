@@ -19,20 +19,12 @@ const arrValMap = (_arr = [], _keys = ['lable', 'value']) => {
   }
   return obj
 }
-const enum_aaa = {
-  a: '1',
-  b: '2',
-  c: '3',
-  d: '3',
-  e: '5',
-  f: 'aaa'
-} as const
 
-type O = typeof enum_aaa
+const enum_names = { name: '' } as const
+type O = typeof enum_names
 type K = keyof O
 type V = O[K]
-
-let res = prTools.arrFromEnum(enum_aaa, 'a', 'b')
+let res = prTools.arrFromEnum(enum_names, 'key', 'val')
 // res[0].
 
 console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
