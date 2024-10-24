@@ -143,7 +143,7 @@ export const num2split = (_number: number | string): string => {
  * @param _keys 需要筛选哪些字段
  * @returns {} 筛选后的对象
  */
-export const filterKeys = <T extends Record<string, unknown>, K extends keyof T>(_obj: T, _keys: K[] = []): Record<K, unknown> => {
+export const filterKeys = <T extends Record<string | number, any>, K extends keyof T>(_obj: T, _keys: K[] = []): Record<K, unknown> => {
   const obj = { ..._obj }
   const keys = Object.keys(obj)
   for (const key of keys) {
