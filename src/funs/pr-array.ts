@@ -86,7 +86,7 @@ export const arrFilterDup = <T extends Record<string | number, any>, K extends k
  * 筛选 数组对象 中指定的key
  * @param _arr 需要筛选的对象数组
  * @param _keys 需要筛选哪些字段
- * @example arrFilterKeys(arr, ['lable', 'name'])
+ * @example arrFilterKeys(arr, ['label', 'name'])
  * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
  */
 export const arrFilterKeys = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _keys: K[] = []) => {
@@ -100,18 +100,18 @@ export const arrFilterKeys = <T extends Record<string | number, any>, K extends 
 
 /**
  * 根据一个枚举对象生成 常用的键值对数组
- * @param _enum 枚举对象 { value: lable }
+ * @param _enum 枚举对象 { value: label }
  * @param _value_name 值名
- * @param _lable_name 键名
- * @example arrFromEnum(obj, ['value', 'lable'])
+ * @param _label_name 键名
+ * @example arrFromEnum(obj, ['value', 'label'])
  * @returns 键值对数组
  */
-export const arrFromEnum = <T extends Record<string | number, any>, K extends string | number = 'value', V extends string | number = 'lable'>(_enum: T, _value_name = 'value' as K, _lable_name = 'lable' as V) => {
+export const arrFromEnum = <T extends Record<string | number, any>, K extends string | number = 'value', V extends string | number = 'label'>(_enum: T, _value_name = 'value' as K, _label_name = 'label' as V) => {
   type Obj = { [key in K | V]: any }
   const arr = []
   const items = Object.entries(_enum)
-  for (const [value, lable] of items) {
-    const obj = { [_lable_name]: lable, [_value_name]: value } as Obj
+  for (const [value, label] of items) {
+    const obj = { [_label_name]: label, [_value_name]: value } as Obj
     arr.push(obj)
   }
   return arr
