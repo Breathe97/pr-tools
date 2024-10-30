@@ -28,3 +28,27 @@ export const offsetTimeStamp = (_val?: Date | number | string, _offset?: number)
     return 0
   }
 }
+
+export const m = 1000 * 60
+export const h = m * 60
+export const d = h * 24
+
+export const week_enum = {
+  ['0']: '0',
+  ['1']: '1',
+  ['2']: '2',
+  ['3']: '3',
+  ['4']: '4',
+  ['5']: '5',
+  ['6']: '6',
+  ['00']: '日',
+  ['01']: '一',
+  ['02']: '二',
+  ['03']: '三',
+  ['04']: '四',
+  ['05']: '五',
+  ['06']: '六'
+} as const
+
+export type T_week = typeof week_enum
+export type K_week = keyof T_week

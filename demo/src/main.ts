@@ -10,23 +10,23 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
 // uuid
 {
   let str = uuid(32, 16)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:uuid`, str)
 }
 {
   // random
   let str = random(100000, 999999) // 6位数字
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:random`, str)
 }
 {
   // randomName
   let str = randomName(2, 4) // 2-4位昵称
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:randomName`, str)
 }
 // filterKeys
 {
   const obj = { name: 'a', age: 10, phone: 22, 1: 3, '2': 44 }
   let res = prTools.filterKeys(obj, ['phone', 'age', 1])
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 }
 
 // arrFilterDup
@@ -37,7 +37,7 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
     { name: 'c', age: 10, phone: 789 }
   ]
   let res = prTools.arrFilterDup(arr, ['age'], true)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 }
 
 // arrFromEnum
@@ -50,7 +50,7 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
   } as const
 
   const res = arrFromEnum(enum_template, 'key')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 
   // 另外可能会用到的定义
   type O = typeof enum_template
@@ -61,31 +61,39 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
 // md5
 {
   let str = md5('123456')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:md5`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:md5`, str)
 }
 
 // timeFormat
 {
-  let str = timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
+  let str = timeFormat('2024/10/27 04:06:06', 'YYYY-MM-DD hh:mm:ss 星期WWW')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFormat`, str)
+}
+{
+  let str = prTools.timeRange('2024/10/27 04:06:06', 'week')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:week`, str)
+}
+{
+  let str = prTools.timeRange('2024/04/27 04:06:06', 'month')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:month`, str)
 }
 // timeFrom
 {
   let str = timeFrom(new Date().getTime() - 5600000)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFrom`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFrom`, str)
 }
 // line2hump
 {
   let str = prTools.line2hump('asd-daa')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:line2hump`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:line2hump`, str)
 }
 // hump2line
 {
   let str = prTools.hump2line('AddaDdd')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:hump2line`, str)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:hump2line`, str)
 }
 // bytesFormat
 {
   let res = prTools.bytesFormat(22222)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 }
