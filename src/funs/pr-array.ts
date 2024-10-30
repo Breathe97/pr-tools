@@ -98,19 +98,21 @@ export const arrFilterKeys = <T extends Record<string | number, any>, K extends 
   return arr
 }
 
-export const arrFromEnum = <T extends Record<string | number, any>, K extends string | number, V extends string | number>(_enum: T, _key_name = 'lable' as K, _val_name = 'value' as V) => {
-  type Obj = {
-    [key in K | V | 'lable' | 'value']: any
-  }
+/**
+ * 根据一个枚举对象生成 常用的键值对数组
+ * @param _enum 枚举对象
+ * @param _key_name 键名
+ * @param _val_name 值名
+ * @example arrFromEnum(obj, ['lable', 'value'])
+ * @returns 键值对数组
+ */
+export const arrFromEnum = <T extends Record<string | number, any>, K extends string | number = 'lable', V extends string | number = 'value'>(_enum: T, _key_name = 'lable' as K, _val_name = 'value' as V) => {
+  type Obj = { [key in K | V]: any }
   const arr = []
   const items = Object.entries(_enum)
   for (const [key, val] of items) {
-    const obj = {
-      [_key_name]: key,
-      [_val_name]: val
-    } as Obj
+    const obj = { [_key_name]: key, [_val_name]: val } as Obj
     arr.push(obj)
   }
-
   return arr
 }

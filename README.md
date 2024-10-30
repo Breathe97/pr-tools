@@ -61,6 +61,25 @@ import * as prTools from 'pr-tools'
   let res = prTools.arrFilterDup(arr, ['age'], true)
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
 }
+
+// arrFromEnum
+{
+  const enum_template = {
+    lable_1: 'value_1',
+    lable_2: 'value_2',
+    lable_3: 'value_3',
+    lable_4: 'value_4'
+  } as const
+
+  const res = arrFromEnum(enum_template, 'key')
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+
+  // 另外可能会用到的定义
+  type O = typeof enum_template
+  type K = keyof O // "lable_1" | "lable_2" | "lable_3" | "lable_4"
+  type V = O[K] // "value_1" | "value_2" | "value_3" | "value_4"
+}
+
 ```
 
 #### md5 加密
