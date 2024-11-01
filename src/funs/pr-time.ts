@@ -1,4 +1,4 @@
-import { offsetTimeStamp, week_enum, d } from '../tools'
+import { offsetTimeStamp, week_enum, d_timestamp } from '../tools'
 import type { K_week } from '../tools'
 
 /**
@@ -121,11 +121,11 @@ export const timeRange = (_val?: any, _range_type: 'week' | 'month' = 'month', _
   switch (_range_type) {
     case 'week':
       {
-        let startTimestamp = timestamp - Number(W) * d
+        let startTimestamp = timestamp - Number(W) * d_timestamp
         let index = 0
         while (index < 7) {
           index++
-          const timestamp = startTimestamp + index * d
+          const timestamp = startTimestamp + index * d_timestamp
           const str = timeFormat(timestamp, 'YY/MM/DD')
           arr.push(str)
         }
@@ -133,11 +133,11 @@ export const timeRange = (_val?: any, _range_type: 'week' | 'month' = 'month', _
       break
     case 'month':
       {
-        let startTimestamp = timestamp - Number(D) * d
+        let startTimestamp = timestamp - Number(D) * d_timestamp
         let index = 0
         while (index < 31) {
           index++
-          const timestamp = startTimestamp + index * d
+          const timestamp = startTimestamp + index * d_timestamp
           const str = timeFormat(timestamp, 'DD')
           arr.push(str)
         }

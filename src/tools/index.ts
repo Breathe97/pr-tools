@@ -29,10 +29,29 @@ export const offsetTimeStamp = (_val?: Date | number | string, _offset?: number)
   }
 }
 
-export const m = 1000 * 60
-export const h = m * 60
-export const d = h * 24
+/**
+ * 一秒的毫秒
+ */
+export const s_timestamp = 1000 // 秒
 
+/**
+ * 一分钟的毫秒
+ */
+export const m_timestamp = s_timestamp * 60 // 分
+
+/**
+ * 一小时的毫秒
+ */
+export const h_timestamp = m_timestamp * 60 // 时
+
+/**
+ * 一天的毫秒
+ */
+export const d_timestamp = h_timestamp * 24 // 天
+
+/**
+ * 周的转换枚举
+ */
 export const week_enum = {
   ['0']: '0',
   ['1']: '1',
