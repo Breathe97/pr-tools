@@ -1,5 +1,5 @@
-import { offsetTimeStamp, week_enum, d_timestamp } from '../tools'
-import type { K_week } from '../tools'
+import { offsetTimeStamp, week_enum, d_timestamp } from '../tools/index'
+import type { K_week } from '../tools/index'
 
 /**
  * 获取时间戳 失败返回 0

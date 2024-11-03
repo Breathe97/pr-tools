@@ -97,3 +97,10 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
   let res = prTools.bytesFormat(22222)
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 }
+
+{
+  let res = await prTools.stepExe(80, 10, async (_index, _cuonts) => {
+    console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff;', `------->Breathe:_index, _cuonts`, _index, _cuonts)
+  })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
+}
