@@ -19,7 +19,7 @@ export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
  */
-export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD', _offset?: number, _empty_str: string = '-'): string => {
+export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   if (isNaN(_val) && timestamp === 0) return _empty_str // 错误时间
@@ -63,7 +63,7 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD', _offset?:
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD', _offset?: number, _empty_str: string = '-'): string => {
+export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
   if (isNaN(_val) && timestamp === 0) return _empty_str // 错误时间
