@@ -22,7 +22,7 @@ export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val
 export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
-  if (isNaN(_val) && timestamp === 0) return _empty_str // 错误时间
+  if (Number(_val) !== 0 && timestamp === 0) return _empty_str // 错误时间
 
   const date = new Date(timestamp)
 
@@ -66,7 +66,7 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
 export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
   const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
 
-  if (isNaN(_val) && timestamp === 0) return _empty_str // 错误时间
+  if (Number(_val) !== 0 && timestamp === 0) return _empty_str // 错误时间
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
