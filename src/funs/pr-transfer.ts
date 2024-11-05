@@ -156,3 +156,28 @@ export const filterKeys = <T extends Record<string | number, any>, K extends key
   }
   return obj
 }
+
+/**
+ * 生成高亮字符串的html
+ * @param _text 过来的字符串
+ * @param _keys 关键词数组 string[]
+ * @example highlight('123456', ['3', '5'])
+ * @returns 处理后的 html 字符串
+ */
+export const highlight = (_text: string, _keys: string[], _options: { flags?: 'g' | 'gi'; style?: string } = {}) => {
+  const keys = _keys.filter((val) => val !== '')
+  if (keys.length === 0) return _text
+  const options = { flags: 'gi', style: 'text-decoration: underline;text-decoration-color: red;text-underline-offset: 0.2em;', ..._options }
+  const { flags, style } = options
+  const key_str = keys.join('|')
+  const reg = new RegExp(`(${key_str})`, flags)
+  const arr = _text.split(reg)
+  const endArr = []
+  for (const val of arr) {
+    const fall = reg.test(val)
+    const str = fall ? `<span style="${style}">${val}</span>` : val
+    endArr.push(str)
+  }
+  const str = endArr.join('')
+  return str
+}

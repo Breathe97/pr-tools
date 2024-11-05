@@ -66,15 +66,15 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
 
 // timeFormat
 {
-  let str = timeFormat('2024/10/27 04:06:06', 'YYYY-MM-DD hh:mm:ss 星期WWW')
+  let str = timeFormat('2024/11/06 04:06:06', 'YYYY-MM-DD hh:mm:ss 星期WWW')
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFormat`, str)
 }
 {
-  let str = prTools.timeRange('2024/10/27 04:06:06', 'week')
+  let str = prTools.timeRange('2024/11/06 04:06:06', 'week', { split: true, offset_d: 0 })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:week`, str)
 }
 {
-  let str = prTools.timeRange('2024/04/27 04:06:06', 'month')
+  let str = prTools.timeRange('2024/10/06 04:06:06', 'month', { split: false, offset_d: -10 })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:month`, str)
 }
 // timeFrom
@@ -98,8 +98,10 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
 }
 
+// stepExe
 {
   let res = await prTools.stepExe(80, 10, async (_index, _cuonts) => {
+    await new Promise((resolve) => setTimeout(() => resolve(true), 1000))
     console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff;', `------->Breathe:_index, _cuonts`, _index, _cuonts)
   })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)

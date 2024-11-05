@@ -1,6 +1,28 @@
 import { offsetTimeStamp, week_enum, d_timestamp } from '../tools/index'
 import type { K_week } from '../tools/index'
 
+interface Time_Options {
+  /**
+   * 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
+   */
+  offset?: number
+  /**
+   * 占位符 格式化失败显示的内容 默认为 -
+   */
+  empty_str?: string
+}
+
+interface TimeRange_Options extends Time_Options {
+  /**
+   * 是否按照传入时间进行分割 默认为 false
+   */
+  split?: boolean
+  /**
+   * 如果偏移天数 默认为 0 , -1 则所有结果向前偏移1天
+   */
+  offset_d?: number
+}
+
 /**
  * 获取时间戳 失败返回 0
  * @param _val Date | number | string
@@ -14,15 +36,17 @@ export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val
  * 格式化时间
  * @param _val Date | number | string
  * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
- * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
- * @param _empty_str 占位符 格式化失败显示的内容 默认为 -
+ * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
  */
-export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
-  const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _options: Time_Options = {}): string => {
+  const options = { empty_str: '-', ..._options }
+  const { empty_str, offset } = options
 
-  if (Number(_val) !== 0 && timestamp === 0) return _empty_str // 错误时间
+  const timestamp = offsetTimeStamp(_val, offset) // 尝试转为数字时间戳并修正时区
+
+  if (Number(_val) !== 0 && timestamp === 0) return empty_str // 错误时间
 
   const date = new Date(timestamp)
 
@@ -58,15 +82,17 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
  * 多久之前时间
  * @param _val Date | number | string
  * @param format 格式化模板 YYYY-MM-DD hh:mm:ss
- * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
- * @param _empty_str 占位符 格式化失败显示的内容 默认为 -
+ * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _offset?: number, _empty_str: string = '-'): string => {
-  const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
+export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _options: Time_Options = {}): string => {
+  const options = { empty_str: '-', ..._options }
+  const { empty_str, offset } = options
 
-  if (Number(_val) !== 0 && timestamp === 0) return _empty_str // 错误时间
+  const timestamp = offsetTimeStamp(_val, offset) // 尝试转为数字时间戳并修正时区
+
+  if (Number(_val) !== 0 && timestamp === 0) return empty_str // 错误时间
 
   // 如果要优先处理为 多久之前
   let timer = new Date().getTime() - timestamp
@@ -104,47 +130,54 @@ export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _o
 /**
  * 获取某个时间的范围日期
  * @param _val Date | number | string
- * @param _range_type 本周 | 本月 'week' | 'month' = 'month'
- * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
- * @param _empty_str 占位符 格式化失败显示的内容 默认为 -
+ * @param _range 本周 | 本月 'week' | 'month' = 'month'
+ * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeRange(new Date().getTime())
  * @returns [] 该范围的每一天集合
  */
-export const timeRange = (_val?: any, _range_type: 'week' | 'month' = 'month', _offset?: number, _empty_str: string = '-') => {
-  const timestamp = offsetTimeStamp(_val, _offset) // 尝试转为数字时间戳并修正时区
-  if (isNaN(_val) && timestamp === 0) return Array(31).fill(_empty_str) // 错误时间 返回最大长度的数组占位
+export const timeRange = (_val?: any, _range: 'week' | 'month' = 'month', _options: TimeRange_Options = {}) => {
+  const options = { empty_str: '-', split: false, offset_d: 0, ..._options }
+  const { empty_str, offset, split, offset_d } = options
+
+  const timestamp = offsetTimeStamp(_val, offset) // 尝试转为数字时间戳并修正时区
+
+  if (Number(_val) !== 0 && timestamp === 0) return Array(31).fill(empty_str) // 错误时间 返回最大长度的数组占位
+
   const time_str = timeFormat(timestamp, 'YYYY-MM-D-W')
   const [Y, M, D, W] = time_str.split('-')
+  let max_length = 0 // 数组个数
+  let _offset_d = -offset_d
 
-  // 开始生成
-  let arr = []
-  switch (_range_type) {
+  switch (_range) {
     case 'week':
       {
-        let startTimestamp = timestamp - Number(W) * d_timestamp
-        let index = 0
-        while (index < 7) {
-          index++
-          const timestamp = startTimestamp + index * d_timestamp
-          const str = timeFormat(timestamp, 'YY/MM/DD')
-          arr.push(str)
-        }
+        _offset_d = _offset_d + Number(W)
+        max_length = 7
       }
       break
     case 'month':
       {
-        let startTimestamp = timestamp - Number(D) * d_timestamp
-        let index = 0
-        while (index < 31) {
-          index++
-          const timestamp = startTimestamp + index * d_timestamp
-          const str = timeFormat(timestamp, 'DD')
-          arr.push(str)
-        }
-        arr = [...new Set(arr)]
-        arr = Array.from(arr, (D) => `${Y}/${M}/${D}`)
+        _offset_d = _offset_d + Number(D)
+        max_length = new Date(Number(Y), Number(M), 0).getDate() // 当前月最大天数
       }
       break
+  }
+
+  // 开始生成
+  let arr = []
+  {
+    let startTimestamp = timestamp - _offset_d * d_timestamp // 开始
+    let index = 0
+    while (index < max_length) {
+      index++
+      const _timestamp = startTimestamp + index * d_timestamp
+      const str = timeFormat(_timestamp, 'YY/MM/DD')
+      arr.push(str)
+    }
+  }
+  // 分割
+  if (split) {
+    arr = [arr.slice(0, _offset_d), arr.slice(_offset_d)]
   }
   return arr
 }

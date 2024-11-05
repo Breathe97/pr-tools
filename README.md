@@ -214,6 +214,27 @@ export const regExps = {
 }
 ```
 
+#### highlight 字符串高亮
+
+```js
+{
+  let res = prTools.highlight('123456', ['3', '5'])
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+}
+```
+
+#### 在 react 中使用
+
+```jsx
+<div style={{ padding: 20 }} dangerouslySetInnerHTML={{ __html: highlight('123456', ['3', '5']) }}></div>
+```
+
+#### 在 vue 中使用
+
+```vue
+<div v-html="highlight('123456', ['3', '5'])"></div>
+```
+
 ## 代码仓库
 
 [github](https://github.com/breathe97/pr-tools)
