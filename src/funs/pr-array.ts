@@ -61,10 +61,13 @@ export const arrRange = (_arr = [], _accuracy = 10) => {
 export const arrFilterDup = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _keys: K[] = [], _cover = true): T[] => {
   const map = new Map()!
   for (const obj of _arr) {
-    let key = 'map'
+    const arr = []
     for (const _key of _keys) {
-      key += `-${obj[_key]}`
+      if (obj.haxOwn(_key)) {
+        arr.push(obj[_key])
+      }
     }
+    const key = `map-${arr.join('-')}`
     const has = map.has(key)
     if (!has) {
       map.set(key, obj)
