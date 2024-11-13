@@ -50,7 +50,6 @@ import * as prTools from 'pr-tools'
 /**
  * 获取某个时间的范围日期
  * @param _val Date | number | string
- * @param _range 本周 | 本月 'week' | 'month' = 'month'
  * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeRange(new Date().getTime())
  * @returns [] 该范围的每一天集合
