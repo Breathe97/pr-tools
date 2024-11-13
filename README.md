@@ -227,7 +227,7 @@ import * as prTools from 'pr-tools'
 #### 在 react 中使用
 
 ```jsx
-<div style={{ padding: 20 }} dangerouslySetInnerHTML={{ __html: highlight('123456', ['3', '5']) }}></div>
+<div dangerouslySetInnerHTML={{ __html: highlight('123456', ['3', '5']) }}></div>
 ```
 
 #### 在 vue 中使用
