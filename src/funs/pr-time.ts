@@ -121,7 +121,7 @@ interface TimeRange_Options extends Time_Options {
   /**
    * 生成范围 本周 | 本月 'week' | 'month' = 'month'
    */
-  _range?: 'week' | 'month'
+  range?: 'week' | 'month'
 
   /**
    * 是否按照传入时间进行分割 默认为 false
@@ -136,7 +136,7 @@ interface TimeRange_Options extends Time_Options {
   /**
    * 输出的日期格式 默认为 YYYY-MM-DD
    */
-  _format?: string
+  format?: string
 }
 
 /**
@@ -147,8 +147,8 @@ interface TimeRange_Options extends Time_Options {
  * @returns [] 该范围的每一天集合
  */
 export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
-  const options = { _range: 'month', _format: 'YYYY-MM-DD', empty_str: '-', split: false, offset_d: 0, ..._options }
-  const { _range, empty_str, offset, split, offset_d, _format } = options
+  const options = { range: 'month', format: 'YYYY-MM-DD', empty_str: '-', split: false, offset_d: 0, ..._options }
+  const { range, empty_str, offset, split, offset_d, format } = options
 
   const timestamp = offsetTimeStamp(_val, offset) // 尝试转为数字时间戳并修正时区
 
@@ -159,7 +159,7 @@ export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
   let max_length = 0 // 数组个数
   let _offset_d = -offset_d
 
-  switch (_range) {
+  switch (range) {
     case 'week':
       {
         _offset_d = _offset_d + Number(W)
@@ -182,7 +182,7 @@ export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
     while (index < max_length) {
       index++
       const _timestamp = startTimestamp + index * d_timestamp
-      const str = timeFormat(_timestamp, _format)
+      const str = timeFormat(_timestamp, format)
       arr.push(str)
     }
   }

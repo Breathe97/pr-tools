@@ -70,11 +70,11 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFormat`, str)
 }
 {
-  let str = prTools.timeRange('2024/11/06 04:06:06', 'week', { split: true, offset_d: 0 })
+  let str = prTools.timeRange('2024/11/06 04:06:06', { range: 'month', split: true, offset_d: 0 })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:week`, str)
 }
 {
-  let str = prTools.timeRange('2024/10/06 04:06:06', 'month', { split: false, offset_d: -10 })
+  let str = prTools.timeRange('2024/10/06 04:06:06', { range: 'week', split: false, offset_d: -10 })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:month`, str)
 }
 // timeFrom

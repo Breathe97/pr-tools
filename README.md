@@ -2,13 +2,13 @@
 
 ## 立即开始
 
-#### 安装
+### 安装
 
 ```bash
 npm i pr-tools
 ```
 
-#### 引入
+### 引入
 
 ```js
 // 按需引入
@@ -17,6 +17,96 @@ import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom, line2hump
 // 或全量引入
 import * as prTools from 'pr-tools'
 ```
+
+### 一些例子
+
+```js
+// uuid
+{
+  let str = uuid(32, 16)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:uuid`, str)
+}
+{
+  // random
+  let str = random(100000, 999999) // 6位数字
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:random`, str)
+}
+{
+  // randomName
+  let str = randomName(2, 4) // 2-4位昵称
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:randomName`, str)
+}
+// filterKeys
+{
+  const obj = { name: 'a', age: 10, phone: 22, 1: 3, '2': 44 }
+  let res = prTools.filterKeys(obj, ['phone', 'age', 1])
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
+}
+
+// arrFilterDup
+{
+  const arr = [
+    { name: 'a', age: 10, phone: 123 },
+    { name: 'b', age: 12, phone: 456 },
+    { name: 'c', age: 10, phone: 789 }
+  ]
+  let res = prTools.arrFilterDup(arr, ['age'], true)
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
+}
+
+// arrFromEnum
+{
+  const enum_template = {
+    lable_1: 'value_1',
+    lable_2: 'value_2',
+    lable_3: 'value_3',
+    lable_4: 'value_4'
+  } as const
+
+  const res = arrFromEnum(enum_template, 'key')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:res`, res)
+
+  // 另外可能会用到的定义
+  type O = typeof enum_template
+  type K = keyof O // "lable_1" | "lable_2" | "lable_3" | "lable_4"
+  type V = O[K] // "value_1" | "value_2" | "value_3" | "value_4"
+}
+
+// md5
+{
+  let str = md5('123456')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:md5`, str)
+}
+
+// timeFormat
+{
+  let str = timeFormat('2024/11/06 04:06:06', 'YYYY-MM-DD hh:mm:ss 星期WWW')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFormat`, str)
+}
+```
+
+#### highlight 字符串高亮
+
+```js
+{
+  let res = prTools.highlight('123456', ['3', '5'])
+  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+}
+```
+
+#### 在 react 中使用
+
+```jsx
+<div dangerouslySetInnerHTML={{ __html: highlight('123456', ['3', '5']) }}></div>
+```
+
+#### 在 vue 中使用
+
+```vue
+<div v-html="highlight('123456', ['3', '5'])"></div>
+```
+
+### 更多的函数
 
 #### 时间相关函数
 
@@ -232,27 +322,6 @@ import * as prTools from 'pr-tools'
  * @example exeDelayed(()=>{}, 500)
  * @returns
  */
-```
-
-#### highlight 字符串高亮
-
-```js
-{
-  let res = prTools.highlight('123456', ['3', '5'])
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
-```
-
-#### 在 react 中使用
-
-```jsx
-<div dangerouslySetInnerHTML={{ __html: highlight('123456', ['3', '5']) }}></div>
-```
-
-#### 在 vue 中使用
-
-```vue
-<div v-html="highlight('123456', ['3', '5'])"></div>
 ```
 
 ## 代码仓库
