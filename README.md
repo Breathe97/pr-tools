@@ -207,10 +207,30 @@ import * as prTools from 'pr-tools'
 
 /**
  * 生成高亮字符串的html
- * @param _text 过来的字符串
+ * @param _text 当前文本字符串
  * @param _keys 关键词数组 string[]
  * @example highlight('123456', ['3', '5'])
  * @returns 处理后的 html 字符串
+ */
+```
+
+#### 其他
+
+```js
+/**
+ * 分段执行
+ * @param _cuont 一共执行多少次 最小为 0
+ * @param _step 每次执行多少次 最小为 1
+ * @example exeStep(98, 7, ()=>{})
+ * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
+ */
+
+/**
+ * 延迟执行 强制将请求延长时间以模拟 loading
+ * @param _func 需要执行的函数
+ * @param _timeout 最小执行时间ms 默认 500ms
+ * @example exeDelayed(()=>{}, 500)
+ * @returns
  */
 ```
 

@@ -24,6 +24,7 @@ export const exeStep = async (_cuont: number, _step: number, _cb = async (_index
  * 延迟执行 强制将请求延长时间以模拟 loading
  * @param _func 需要执行的函数
  * @param _timeout 最小执行时间ms 默认 500ms
+ * @example exeDelayed(()=>{}, 500)
  * @returns
  */
 export const exeDelayed = async (_func: Function, _timeout: number = 500) => {
