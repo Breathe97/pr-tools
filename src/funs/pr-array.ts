@@ -63,9 +63,7 @@ export const arrFilterDup = <T extends Record<string | number, any>, K extends k
   for (const obj of _arr) {
     const arr = []
     for (const _key of _keys) {
-      if (obj.haxOwn(_key)) {
-        arr.push(obj[_key])
-      }
+      arr.push(obj[_key])
     }
     const key = `map-${arr.join('-')}`
     const has = map.has(key)

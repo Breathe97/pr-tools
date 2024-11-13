@@ -8,7 +8,7 @@
 export const random = (_min = 0, _max = 1) => {
   const min = Math.max(0, _min)
   const max = Math.max(1, _max)
-  let num = Math.random() * (max - min + 1) + min
+  const num = Math.random() * (max - min + 1) + min
   return parseInt(`${num}`, 10)
 }
 
@@ -51,8 +51,8 @@ const mameStr = '徒靡绪风颢阳曜灵越扶应图町歧蜀魄漠泊穆皇星
 export const randomName = (_min = 1, _max = 1) => {
   const min = Math.max(1, _min)
   const max = Math.max(1, _max)
-  let startIndex = random(1, mameStr.length - (max - min))
-  let endIndex = startIndex + random(min, max)
-  let str = mameStr.slice(startIndex, endIndex)
+  const startIndex = random(1, mameStr.length - (max - min))
+  const endIndex = startIndex + random(min, max)
+  const str = mameStr.slice(startIndex, endIndex)
   return str
 }
