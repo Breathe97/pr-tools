@@ -13,205 +13,206 @@ npm i pr-tools
 ```js
 // 按需引入
 import { uuid, random, randomName, md5, regExps, timeFormat, timeFrom, line2hump, hump2line } from 'pr-tools'
+
 // 或全量引入
 import * as prTools from 'pr-tools'
 ```
 
-#### 常用函数
+#### 时间相关函数
 
 ```js
-// uuid
-{
-  let str = uuid(32, 16)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:uuid`, str)
-}
+/**
+ * 获取时间戳 失败返回 0
+ * @param _val Date | number | string
+ * @example timeStamp()
+ * @example timeStamp('2024-05-23')
+ * @returns 转换后的时间戳 | 0
+ */
 
-{
-  // random
-  let str = random(100000, 999999) // 6位数字
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:random`, str)
-}
+/**
+ * 格式化时间
+ * @param _val Date | number | string
+ * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
+ * @param _options _options: { offset?: number; empty_str?: string }
+ * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
+ * @returns 格式化后的字符串
+ */
 
-{
-  // randomName
-  let str = randomName(2, 4) // 2-4位昵称
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:randomName`, str)
-}
+/**
+ * 多久之前时间
+ * @param _val Date | number | string
+ * @param format 格式化模板 YYYY-MM-DD hh:mm:ss
+ * @param _options _options: { offset?: number; empty_str?: string }
+ * @example timeFrom(new Date().getTime() - 5600000)
+ * @returns 格式化后的字符串
+ */
 
-// md5
-{
-  let str = md5('123456')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:md5`, str)
-}
+/**
+ * 获取某个时间的范围日期
+ * @param _val Date | number | string
+ * @param _range 本周 | 本月 'week' | 'month' = 'month'
+ * @param _options _options: { offset?: number; empty_str?: string }
+ * @example timeRange(new Date().getTime())
+ * @returns [] 该范围的每一天集合
+ */
+```
 
-// filterKeys
-{
-  const obj = { name: 'a', age: 10, phone: 22, 1: 3, 2: 44 }
-  let res = prTools.filterKeys(obj, ['phone', 'age', 1])
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
+#### 数组相关函数
 
-// arrFilterDup
-{
-  const arr = [
-    { name: 'a', age: 10, phone: 123 },
-    { name: 'b', age: 12, phone: 456 },
-    { name: 'c', age: 10, phone: 789 }
-  ]
-  let res = prTools.arrFilterDup(arr, ['age'], true)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
+```js
+/**
+ * 把一纬数组按指定长度分割
+ * @param _arr 一纬数组
+ * @param _size 分割长度
+ * @example arrSlice([1, 2, 3, 4, 5], 2)
+ * @returns 分割后的二维数组
+ */
 
-// arrFromEnum
-{
-  const enum_template = {
-    lable_1: 'value_1',
-    lable_2: 'value_2',
-    lable_3: 'value_3',
-    lable_4: 'value_4'
-  } as const
+/**
+ * 在数组里面向上向下取整数的一个范围
+ * @param _arr 多个数值的数组
+ * @param _accuracy 间隔精度
+ * @returns [min,max]
+ * @notes 例如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
+ * @notes 常在echart中使用  const [yAxisMin, yAxisMax] = arrRange([1,87], 10) // 取区间整数 [1,87] => [0,90]
+ * @example arrRange([-13, 37, 67]) // [-20,70]
+ * @example arrRange([0, 0], 10) // [0,10]
+ */
 
-  const res = arrFromEnum(enum_template, 'key')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
+/**
+ * 数组去重
+ * @param _arr 数组
+ * @param _keys 根据哪些字段去重
+ * @param _cover 如果有重复 是否进行覆盖 默认为 true
+ * @example arrFilterDup(arr, ['name', 'age'])
+ * @returns 去重后的数组
+ */
 
-  // 另外可能会用到的定义
-  type O = typeof enum_template
-  type K = keyof O // "lable_1" | "lable_2" | "lable_3" | "lable_4"
-  type V = O[K] // "value_1" | "value_2" | "value_3" | "value_4"
-}
+/**
+ * 筛选 数组对象 中指定的key
+ * @param _arr 需要筛选的对象数组
+ * @param _keys 需要筛选哪些字段
+ * @example arrFilterKeys(arr, ['label', 'name'])
+ * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
+ */
 
+/**
+ * 根据一个枚举对象生成 常用的键值对数组
+ * @param _enum 枚举对象 { value: label }
+ * @param _value_name 值名
+ * @param _label_name 键名
+ * @example arrFromEnum(obj, ['value', 'label'])
+ * @returns 键值对数组
+ */
+```
+
+#### 随机值相关函数
+
+```js
+/**
+ * 随机生成区间数字
+ * @param _min 最小数字（大于等于0）
+ * @param _max 最大数字（大于等于1）
+ * @example random(100000, 999999)
+ * @returns 随机区间数字
+ */
+
+/**
+ * 随机生成uuid
+ * @param _len 长度
+ * @param _radix 进制 为了保证唯一性 进制过低时会 按照最低长度返回
+ * @example uuid(32, 16)
+ * @returns 随机uuid
+ */
+
+/**
+ * 随机生成昵称
+ * @param _min 最小名称长度(最小1)
+ * @param _max 最大名称长度(大于等于1)
+ * @example randomName(2, 4)
+ * @returns 随机昵称
+ */
 ```
 
 #### md5 加密
 
 ```js
-{
-  let str = md5('123456')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:md5`, str)
-}
+/**
+ * 对字符串进行md5加密
+ * @param _string 需要加密的字符串
+ * @example md5('123456')
+ * @returns 加密后的字符串
+ */
 ```
 
-#### regExps 正则表达式
+#### 转换相关函数
 
 ```js
-{
-  let str = regExps.mobile.test('222')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:regExps`, str)
-}
+/**
+ * ArrayBuffer转十六进制
+ * @param _buffer arrayBuffer
+ * @returns 十六进制字符串
+ */
 
-// 其他正则
-export const regExps = {
-  /**
-   * 验证电子邮箱格式
-   */
-  email: new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/),
+/**
+ * 十六进制转ArrayBuffer
+ * @param _str 十六进制字符串
+ * @returns buffer
+ */
 
-  /**
-   * 验证手机格式
-   */
-  mobile: new RegExp(/^1[3-9]\d{9}$/),
+/**
+ * 十六进制转ASCII码
+ * @param _hexCharCodeStr 16进制字符串
+ * @returns 转换后的ASCII码
+ */
 
-  /**
-   * 验证URL格式
-   */
-  url: new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w-.\/?%&=]*)?/),
+/**
+ * 短划线转换驼峰
+ * @param _str 短横线字符串
+ * @returns 驼峰字符串
+ */
 
-  /**
-   * 验证ISO类型的日期格式
-   */
-  dateISO: new RegExp(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/),
+/**
+ * 驼峰转换短横线
+ * @param _str 驼峰字符串
+ * @returns 短横线字符串
+ */
 
-  /**
-   * 验证十进制数字
-   */
-  number: new RegExp(/^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/),
+/**
+ * 去除首尾空格
+ * @param _str 字符串
+ * @returns 结果字符串
+ */
 
-  /**
-   * 验证整数
-   */
-  digits: new RegExp(/^\d+$/),
+/**
+ * 字节单位转换
+ * @param _bytes 字节
+ * @param _splitStr 值与单位的分割符 默认为一个空格
+ * @returns 格式化后的字符串
+ */
 
-  /**
-   * 验证身份证号码
-   */
-  idCard: new RegExp(/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/),
+/**
+ * 把数字分割为千分位计量的字符串
+ * @param _number 数值
+ * @example num2split(123456789)
+ * @returns 千分位计量的字符串
+ */
 
-  /**
-   * 是否车牌号
-   */
-  carNo: new RegExp(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/),
+/**
+ * 筛选 对象 中指定的key
+ * @param _obj 需要筛选的 对象
+ * @param _keys 需要筛选哪些字段
+ * @example filterKeys(_obj, ['lable', 'name'])
+ * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
+ */
 
-  /**
-   * 是否新能源车牌号
-   */
-  carNoXNY: new RegExp(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/),
-
-  /**
-   * 是否为2位小数的金额
-   */
-  amount: new RegExp(/^[1-9]\d*(,\d{3})*(\.\d{1,2})?$|^0\.\d{1,2}$/),
-
-  /**
-   * 是否为中文汉字
-   */
-  chinese: new RegExp(/^[\u4e00-\u9fa5]+$/),
-
-  /**
-   * 是否为字母
-   */
-  letter: new RegExp(/^[a-zA-Z]*$/),
-
-  /**
-   * 是否为字母或者数字
-   */
-  enOrNum: new RegExp(/^[0-9a-zA-Z]*$/),
-
-  /**
-   * 是否为固定电话
-   */
-  landline: new RegExp(/^\d{3,4}-\d{7,8}(-\d{3,4})?$/)
-}
-```
-
-#### transfer 转换
-
-```js
-// timeStamp
-{
-  // let str = timeStamp('2024/09/24 04:06:06', 480) // 获取中国时间
-  let str = timeStamp('2024/09/24 04:06:06', 0) // 获取目标时间的 utc 时间戳
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeStamp`, str)
-}
-
-// timeFormat
-{
-  let str = timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFormat`, str)
-}
-
-// timeFrom
-{
-  let str = timeFrom(new Date().getTime() - 5600000)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:timeFrom`, str)
-}
-
-// line2hump
-{
-  let str = prTools.line2hump('asd-daa')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:line2hump`, str)
-}
-
-// hump2line
-{
-  let str = prTools.hump2line('AddaDdd')
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:test:hump2line`, str)
-}
-
-// bytesFormat
-{
-  let res = prTools.bytesFormat(22222)
-  console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:res`, res)
-}
+/**
+ * 生成高亮字符串的html
+ * @param _text 过来的字符串
+ * @param _keys 关键词数组 string[]
+ * @example highlight('123456', ['3', '5'])
+ * @returns 处理后的 html 字符串
+ */
 ```
 
 #### highlight 字符串高亮

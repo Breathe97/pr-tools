@@ -25,9 +25,8 @@ export const arrSlice = (_arr: Array<any>, _size: number) => {
  * @returns [min,max]
  * @notes 例如传入[-13,37,67] 返回 [-20,70] ,类似于[0,0]将会返回[0,10]
  * @notes 常在echart中使用  const [yAxisMin, yAxisMax] = arrRange([1,87], 10) // 取区间整数 [1,87] => [0,90]
- * @example
- * arrRange([-13, 37, 67]) // [-20,70]
- * arrRange([0, 0], 10) // [0,10]
+ * @example arrRange([-13, 37, 67]) // [-20,70]
+ * @example arrRange([0, 0], 10) // [0,10]
  */
 
 export const arrRange = (_arr = [], _accuracy = 10) => {
@@ -54,7 +53,7 @@ export const arrRange = (_arr = [], _accuracy = 10) => {
  * 数组去重
  * @param _arr 数组
  * @param _keys 根据哪些字段去重
- * @param _cover 如果有重复 是否进行覆盖
+ * @param _cover 如果有重复 是否进行覆盖 默认为 true
  * @example arrFilterDup(arr, ['name', 'age'])
  * @returns 去重后的数组
  */

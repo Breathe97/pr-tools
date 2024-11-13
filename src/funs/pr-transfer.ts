@@ -93,7 +93,6 @@ export const delSpaces = (_str: string = ''): string => {
  * @param _splitStr 值与单位的分割符 默认为一个空格
  * @returns 格式化后的字符串
  */
-
 export const bytesFormat = (_bytes: number, _splitStr = ' '): string => {
   const units = ['KB', 'MB', 'GB', 'TB']
   let unit = 'B'

@@ -113,6 +113,7 @@ let uTF8Encode = (string) => {
 /**
  * 对字符串进行md5加密
  * @param _string 需要加密的字符串
+ * @example md5('123456')
  * @returns 加密后的字符串
  */
 export const md5 = (_string = '') => {
