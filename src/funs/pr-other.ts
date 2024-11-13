@@ -24,7 +24,7 @@ export const exeStep = async (_cuont: number, _step: number, _cb = async (_index
  * 延迟执行 强制将请求延长时间以模拟 loading
  * @param _func 需要执行的函数
  * @param _timeout 最小执行时间ms 默认 500ms
- * @example exeDelayed(()=>{}, 500)
+ * @example await exeDelayed(()=>{}, 500)
  * @returns
  */
 export const exeDelayed = async (_func: Function, _timeout: number = 500) => {
@@ -35,4 +35,17 @@ export const exeDelayed = async (_func: Function, _timeout: number = 500) => {
     await new Promise((resolve) => setTimeout(() => resolve(true), offset_timestamp)) // 等待时间
     resolve(res)
   })
+}
+
+/**
+ * 检查函数执行消耗时间
+ * @param _func 需要执行的函数
+ * @example const elapsed = await exeElapsed(()=>{})
+ * @returns elapsed 消耗时间 ms
+ */
+export const exeElapsed = async (_func: Function) => {
+  const now = Date.now()
+  await _func()
+  const elapsed = Date.now() - now
+  return elapsed
 }

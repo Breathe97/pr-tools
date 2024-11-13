@@ -319,8 +319,15 @@ import * as prTools from 'pr-tools'
  * 延迟执行 强制将请求延长时间以模拟 loading
  * @param _func 需要执行的函数
  * @param _timeout 最小执行时间ms 默认 500ms
- * @example exeDelayed(()=>{}, 500)
+ * @example await exeDelayed(()=>{}, 500)
  * @returns
+ */
+
+/**
+ * 检查函数执行消耗时间
+ * @param _func 需要执行的函数
+ * @example const elapsed = await exeElapsed(()=>{})
+ * @returns elapsed 消耗时间 ms
  */
 ```
 
