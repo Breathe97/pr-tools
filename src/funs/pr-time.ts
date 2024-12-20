@@ -6,21 +6,11 @@ interface Time_Options {
    * 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
    */
   offset?: number
+
   /**
    * 占位符 格式化失败显示的内容 默认为 -
    */
   empty_str?: string
-}
-
-interface TimeRange_Options extends Time_Options {
-  /**
-   * 是否按照传入时间进行分割 默认为 false
-   */
-  split?: boolean
-  /**
-   * 如果偏移天数 默认为 0 , -1 则所有结果向前偏移1天
-   */
-  offset_d?: number
 }
 
 /**
@@ -127,6 +117,28 @@ export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _o
   return tips
 }
 
+interface TimeRange_Options extends Time_Options {
+  /**
+   * 生成范围 本周 | 本月 'week' | 'month' = 'month'
+   */
+  range?: 'week' | 'month'
+
+  /**
+   * 是否按照传入时间进行分割 默认为 false
+   */
+  split?: boolean
+
+  /**
+   * 如果偏移天数 默认为 0 , -1 则所有结果向前偏移1天
+   */
+  offset_d?: number
+
+  /**
+   * 输出的日期格式 默认为 YYYY-MM-DD
+   */
+  format?: string
+}
+
 /**
  * 时钟格式化
  * @param _val Date | number | string
@@ -178,14 +190,13 @@ export const clockFormat = (_val: number, _format: string = 'hh:mm:ss'): string 
 /**
  * 获取某个时间的范围日期
  * @param _val Date | number | string
- * @param _range 本周 | 本月 'week' | 'month' = 'month'
  * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeRange(new Date().getTime())
  * @returns [] 该范围的每一天集合
  */
-export const timeRange = (_val?: any, _range: 'week' | 'month' = 'month', _options: TimeRange_Options = {}) => {
-  const options = { empty_str: '-', split: false, offset_d: 0, ..._options }
-  const { empty_str, offset, split, offset_d } = options
+export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
+  const options = { range: 'month', format: 'YYYY-MM-DD', empty_str: '-', split: false, offset_d: 0, ..._options }
+  const { range, empty_str, offset, split, offset_d, format } = options
 
   const timestamp = offsetTimeStamp(_val, offset) // 尝试转为数字时间戳并修正时区
 
@@ -196,7 +207,7 @@ export const timeRange = (_val?: any, _range: 'week' | 'month' = 'month', _optio
   let max_length = 0 // 数组个数
   let _offset_d = -offset_d
 
-  switch (_range) {
+  switch (range) {
     case 'week':
       {
         _offset_d = _offset_d + Number(W)
@@ -219,7 +230,7 @@ export const timeRange = (_val?: any, _range: 'week' | 'month' = 'month', _optio
     while (index < max_length) {
       index++
       const _timestamp = startTimestamp + index * d_timestamp
-      const str = timeFormat(_timestamp, 'YY/MM/DD')
+      const str = timeFormat(_timestamp, format)
       arr.push(str)
     }
   }

@@ -93,7 +93,6 @@ export const delSpaces = (_str: string = ''): string => {
  * @param _splitStr 值与单位的分割符 默认为一个空格
  * @returns 格式化后的字符串
  */
-
 export const bytesFormat = (_bytes: number, _splitStr = ' '): string => {
   const units = ['KB', 'MB', 'GB', 'TB']
   let unit = 'B'
@@ -159,7 +158,7 @@ export const filterKeys = <T extends Record<string | number, any>, K extends key
 
 /**
  * 生成高亮字符串的html
- * @param _text 过来的字符串
+ * @param _text 当前文本字符串
  * @param _keys 关键词数组 string[]
  * @example highlight('123456', ['3', '5'])
  * @returns 处理后的 html 字符串
