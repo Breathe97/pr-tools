@@ -1,5 +1,5 @@
 import * as prTools from '../../src/index.js'
-import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from '../../src/index.js'
+import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_timestamp } from '../../src/index.js'
 
 // import { uuid, md5, regTest, timeFormat, timeFrom } from '../../dist/index.js'
 // import * as prTools from '../../dist/index.js'
@@ -66,20 +66,20 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum } from
 
 // timeFormat
 {
-  let str = timeFormat('2024/11/06 04:06:06', 'YYYY-MM-DD hh:mm:ss 星期WWW')
+  let str = timeFormat(new Date(), 'YYYY-MM-DD hh:mm:ss 星期WWW')
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFormat`, str)
 }
 {
-  let str = prTools.timeRange('2024/11/06 04:06:06', { range: 'month', split: true, offset_d: 0 })
-  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:week`, str)
+  let str = prTools.timeRange(new Date(), { range: 'month', split: true, offset_d: -1 })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test.timeRange.month(offset_d: -1)`, str)
 }
 {
-  let str = prTools.timeRange('2024/10/06 04:06:06', { range: 'week', split: false, offset_d: -10 })
-  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:month`, str)
+  let str = prTools.timeRange(new Date(), { range: 'week', split: false, offset_d: 1 })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeRange.week(offset_d: 1)`, str)
 }
 // timeFrom
 {
-  let str = timeFrom(new Date().getTime() - 5600000)
+  let str = timeFrom(new Date().getTime() - h_timestamp)
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe:test:timeFrom`, str)
 }
 // line2hump
