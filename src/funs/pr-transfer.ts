@@ -88,21 +88,29 @@ export const delSpaces = (_str: string = ''): string => {
 }
 
 /**
- * 字节单位转换
- * @param _bytes 字节
- * @param _splitStr 值与单位的分割符 默认为一个空格
+ * 数据存储单位换算
+ * @param _val 值
+ * @param options.unit 传入的值的起始单位 默认为字节 byte
+ * @param options.splitStr 值与单位的分割符 默认为一个空格
  * @returns 格式化后的字符串
  */
-export const bytesFormat = (_bytes: number, _splitStr = ' '): string => {
-  const units = ['KB', 'MB', 'GB', 'TB']
-  let unit = 'B'
+export const bytesFormat = (_bytes: number, _options: { unit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB' | 'EB' | 'ZB' | 'YB'; split?: string } = {}): string => {
+  const options = { unit: 'B', splitStr: ' ', ..._options }
+  let { unit, splitStr } = options
+
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+  const index = units.findIndex((item) => item === unit)
+
+  const _units = units.slice(index + 1, units.length)
+
   let num = _bytes
-  for (const key of units) {
+  for (const key of _units) {
     unit = key
     num = num / 1024
     if (num < 1024) break
   }
-  return `${num.toFixed(2)}${_splitStr}${unit}`
+  return `${num.toFixed(2)}${splitStr}${unit}`
 }
 
 /**
