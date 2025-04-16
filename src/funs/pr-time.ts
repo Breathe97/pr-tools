@@ -1,4 +1,4 @@
-import { offsetTimeStamp, week_enum, d_timestamp } from '../tools/index'
+import { offsetTimeStamp, week_enum, d_timestamp, h_timestamp, m_timestamp, s_timestamp } from '../tools/index'
 import type { K_week } from '../tools/index'
 
 interface Time_Options {
@@ -137,6 +137,54 @@ interface TimeRange_Options extends Time_Options {
    * 输出的日期格式 默认为 YYYY-MM-DD
    */
   format?: string
+}
+
+/**
+ * 时钟格式化
+ * @param _val Date | number | string
+ * @param format 格式化模板 DD:hh:mm:ss
+ * @example clockFormat(new Date().getTime() - 5600000)
+ * @returns 格式化后的字符串
+ */
+export const clockFormat = (_val: number, _format: string = 'hh:mm:ss'): string => {
+  const D = `${Math.floor(_val / d_timestamp)}`
+  if (_format.includes('D')) {
+    _val = _val % d_timestamp
+  }
+
+  const H = `${Math.floor(_val / h_timestamp)}`
+  if (_format.includes('h')) {
+    _val = _val % h_timestamp
+  }
+
+  const M = `${Math.floor(_val / m_timestamp)}`
+  if (_format.includes('m')) {
+    _val = _val % m_timestamp
+  }
+
+  const S = `${Math.floor(_val / s_timestamp)}`
+  if (_format.includes('s')) {
+    _val = _val % s_timestamp
+  }
+  // 正常对日期的处理
+  const opts = [
+    { k: 'D+', v: D }, // 日
+    { k: 'h+', v: H }, // 时
+    { k: 'm+', v: M }, // 分
+    { k: 's+', v: S } // 秒
+    // 有其他格式化字符需求可以继续添加，必须转化成字符串
+  ]
+
+  let ret
+  for (let { k, v } of opts) {
+    ret = new RegExp(`(${k})`).exec(_format)
+    if (ret) {
+      const str = ret[1]
+      let k_format = v.padStart(str.length, '0') // 生成替换内容 补足0位
+      _format = _format.replace(str, k_format) // 替换
+    }
+  }
+  return _format
 }
 
 /**

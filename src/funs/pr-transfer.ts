@@ -188,3 +188,23 @@ export const highlight = (_text: string, _keys: string[], _options: { flags?: 'g
   const str = endArr.join('')
   return str
 }
+
+/**
+ * base64 编解码
+ */
+export const base64 = {
+  /**
+   * 编码
+   */
+  encode: (_obj: Record<string, any>) => {
+    const res = btoa(encodeURI(JSON.stringify(_obj)))
+    return res
+  },
+  /**
+   * 解码
+   */
+  decode: (_str: string) => {
+    const res = JSON.parse(decodeURI(atob(_str)))
+    return res
+  }
+}
