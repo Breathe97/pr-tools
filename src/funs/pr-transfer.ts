@@ -208,3 +208,20 @@ export const base64 = {
     return res
   }
 }
+
+/**
+ * 对象数组按照某个字段的值进行分类
+ * @param _arr 对象数组
+ * @param _key 的哪一个key
+ * @returns 对象
+ */
+export const groupBy = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _key: K) => {
+  if (Object.groupBy) return Object.groupBy(_arr, (item) => item[_key])
+  const obj: { [key: string]: T[] } = {}
+  for (const item of _arr) {
+    const val = item[_key]
+    const itemArr = obj[val] || []
+    obj[val] = [...itemArr, item]
+  }
+  return obj
+}
