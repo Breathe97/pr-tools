@@ -121,7 +121,7 @@ interface TimeRange_Options extends Time_Options {
   /**
    * 生成范围 本周 | 本月 'week' | 'month' = 'month'
    */
-  range?: 'week' | 'month'
+  range?: 'week' | 'month' | number
 
   /**
    * 是否按照传入时间进行分割 默认为 false
@@ -220,6 +220,12 @@ export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
         max_length = new Date(Number(Y), Number(M), 0).getDate() // 当前月最大天数
       }
       break
+    default:
+      {
+        _offset_d = _offset_d + 1
+        max_length = typeof range === 'number' ? range : 0
+      }
+      break
   }
 
   // 开始生成
@@ -236,7 +242,8 @@ export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
   }
   // 分割
   if (split) {
-    arr = [arr.slice(0, _offset_d), arr.slice(_offset_d)]
+    const index = _offset_d - 1 // 目标天索引
+    arr = [arr.slice(0, index), arr.slice(index, _offset_d), arr.slice(_offset_d)]
   }
   return arr
 }

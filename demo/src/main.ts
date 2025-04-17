@@ -69,14 +69,23 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
   let str = timeFormat(new Date(), 'YYYY-MM-DD hh:mm:ss 星期WWW')
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeFormat`, str)
 }
+
 {
-  let str = prTools.timeRange(new Date(), { range: 'month', split: true, offset_d: -1 })
-  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test.timeRange.month(offset_d: -1)`, str)
+  // 生成本月的每一天 分割当天 偏移到后一天
+  let str = prTools.timeRange(new Date(), { range: 'month', split: true, offset_d: 1 })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test.timeRange`, str)
 }
 {
-  let str = prTools.timeRange(new Date(), { range: 'week', split: false, offset_d: 1 })
-  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeRange.week(offset_d: 1)`, str)
+  // 生成本周的每一天 不分隔当天 不偏移
+  let str = prTools.timeRange(new Date(), { range: 'week', split: false, offset_d: 0 })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeRange`, str)
 }
+{
+  // 生成今天开始的后面7天 分割当天 偏移到前一天
+  let str = prTools.timeRange(new Date(), { range: 7, split: true, offset_d: -1 })
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeRange`, str)
+}
+
 // timeFrom
 {
   let str = timeFrom(new Date().getTime() - h_timestamp)
