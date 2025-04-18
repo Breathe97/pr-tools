@@ -212,14 +212,15 @@ export const base64 = {
 /**
  * 对象数组按照某个字段的值进行分类
  * @param _arr 对象数组
- * @param _key 的哪一个key
+ * @param _key_selector 如何生成分类键
  * @returns 对象
  */
-export const groupBy = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _key: K) => {
-  if (Object.groupBy) return Object.groupBy(_arr, (item) => item[_key])
+export const groupBy = <T extends Record<string | number, any>>(_arr: T[], _key_selector: (item: T, index: number) => any) => {
+  if (Object.groupBy) return Object.groupBy(_arr, _key_selector)
   const obj: { [key: string]: T[] } = {}
-  for (const item of _arr) {
-    const val = item[_key]
+  for (const [index, item] of _arr.entries()) {
+    const key = _key_selector(item, index)
+    const val = item[key]
     const itemArr = obj[val] || []
     obj[val] = [...itemArr, item]
   }
