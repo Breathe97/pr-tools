@@ -66,7 +66,7 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
 
 // timeFormat
 {
-  let str = timeFormat(new Date(), 'YYYY-MM-DD hh:mm:ss 星期WWW')
+  let str = timeFormat('2025/12/30 23:00:00', '当前时间为：YYYY-MM-DD hh:mm:ss 星期WW 今年的第d天 第w周')
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeFormat`, str)
 }
 

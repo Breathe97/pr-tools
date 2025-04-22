@@ -25,7 +25,7 @@ export const timeStamp = (_val?: Date | number | string) => offsetTimeStamp(_val
 /**
  * 格式化时间
  * @param _val Date | number | string
- * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss
+ * @param _format 格式化模板 YYYY-MM-DD hh:mm:ss 周WW 今年第d天 今年第w周
  * @param _options _options: { offset?: number; empty_str?: string }
  * @example timeFormat('2024/09/24 04:06:06', 'YYYY-MM-DD hh:mm:ss')
  * @returns 格式化后的字符串
@@ -39,16 +39,28 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
   if (Number(_val) !== 0 && timestamp === 0) return empty_str // 错误时间
 
   const date = new Date(timestamp)
+  const Y = `${date.getFullYear()}`
+  const M = `${date.getMonth() + 1}`
+  const D = `${date.getDate()}`
+  const W = `${date.getDay() === 0 ? 7 : date.getDay()}`
+  const h = `${date.getHours()}`
+  const m = `${date.getMinutes()}`
+  const s = `${date.getSeconds()}`
+
+  const d = `${Math.ceil((timestamp - timeStamp(`${Y}/01/01 00:00:00`) + 1) / d_timestamp)}`
+  const w = `${Math.ceil(((timestamp - timeStamp(`${Y}/01/01 00:00:00`)) / d_timestamp - Number(W)) / 7) + 1}`
 
   // 正常对日期的处理
   const opts = [
-    { k: 'Y+', v: `${date.getFullYear()}` }, // 年
-    { k: 'M+', v: `${date.getMonth() + 1}` }, // 月
-    { k: 'D+', v: `${date.getDate()}` }, // 日
-    { k: 'W+', v: `${date.getDay()}` }, // 周
-    { k: 'h+', v: `${date.getHours()}` }, // 时
-    { k: 'm+', v: `${date.getMinutes()}` }, // 分
-    { k: 's+', v: `${date.getSeconds()}` } // 秒
+    { k: 'Y+', v: Y }, // 年
+    { k: 'M+', v: M }, // 月
+    { k: 'D+', v: D }, // 日
+    { k: 'W+', v: W }, // 周
+    { k: 'h+', v: h }, // 时
+    { k: 'm+', v: m }, // 分
+    { k: 's+', v: s }, // 秒
+    { k: 'd+', v: d }, // 第几天
+    { k: 'w+', v: w } // 第几周
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
   ]
 
