@@ -1,5 +1,8 @@
 import { arrSlice } from './pr-array'
 
+const throttleMap = new Map()
+const debouncetleMap = new Map()
+
 /**
  * 分段执行
  * @param _cuont 一共执行多少次 最小为 0
@@ -48,4 +51,40 @@ export const exeElapsed = async (_func: Function) => {
   await _func()
   const elapsed = Date.now() - now
   return elapsed
+}
+
+/**
+ * 节流
+ * @param _key 唯一标识
+ * @param _func 函数
+ * @param _delay 节流时间  (该时间只内调用一次)
+ */
+export const throttle = (_key: string, _func: Function, _delay: number) => {
+  const now = new Date().getTime()
+  const timestamp = throttleMap.get(_key) || 0
+  // 如果本次触发时间大于上一次触发时间
+  if (now - _delay > timestamp) {
+    _func()
+    throttleMap.set(_key, now) // 记录本次时间
+  }
+}
+
+/**
+ * 防抖
+ * @param _key 唯一标识
+ * @param _func 函数
+ * @param _delay 防抖时间 (大于该时间之后才调用)
+ */
+export const debounce = (_key: string, _func: Function, _delay: number) => {
+  const now = new Date().getTime()
+  const timestamp = debouncetleMap.get(_key)
+  if (!timestamp) {
+    debouncetleMap.set(_key, now) // 记录本次时间
+    return
+  }
+  // 如果本次触发时间大于上一次触发时间
+  if (now - _delay > timestamp) {
+    _func()
+    debouncetleMap.set(_key, now) // 记录本次时间
+  }
 }
