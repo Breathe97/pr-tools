@@ -4,6 +4,25 @@ const throttleMap = new Map()
 const debouncetleMap = new Map()
 
 /**
+ * 执行超时
+ * @param func 待执行函数
+ * @param _options { timeout?: number; message?: string }
+ */
+export const exeTimeout = async (func: Function, _options: { timeout?: number; message?: string } = {}) => {
+  await new Promise(async (resolve, reject) => {
+    const { timeout = 5 * 1000, message = 'timeout' } = _options
+    const timer = window.setTimeout(() => reject(message), timeout)
+    try {
+      const res = await func()
+      resolve(res)
+    } catch (error) {
+      reject(error)
+    }
+    clearTimeout(timer)
+  })
+}
+
+/**
  * 分段执行
  * @param _cuont 一共执行多少次 最小为 0
  * @param _step 每次执行多少次 最小为 1

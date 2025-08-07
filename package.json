@@ -1,7 +1,7 @@
 {
   "name": "pr-tools",
   "description": "一些常用的js方法：时间处理、数组处理、md5加密、uuid、随机中文名等各种转换。",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "type": "module",
   "files": [
     "dist"
