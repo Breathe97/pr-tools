@@ -8,8 +8,8 @@ const debouncetleMap = new Map()
  * @param func 待执行函数
  * @param _options { timeout?: number; message?: string }
  */
-export const exeTimeout = async (func: Function, _options: { timeout?: number; message?: string } = {}) => {
-  await new Promise(async (resolve, reject) => {
+export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: number; message?: string } = {}) => {
+  return new Promise<T>(async (resolve, reject) => {
     const { timeout = 5 * 1000, message = 'timeout' } = _options
     const timer = window.setTimeout(() => reject(message), timeout)
     try {
