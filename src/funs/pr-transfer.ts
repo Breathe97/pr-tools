@@ -108,7 +108,7 @@ export const bytesFormat = (_bytes: number, _options: { unit?: 'B' | 'KB' | 'MB'
   for (const key of _units) {
     unit = key
     num = num / 1024
-    if (num < 1024) break
+    if (Math.abs(num) < 1024) break
   }
   return `${num.toFixed(2)}${splitStr}${unit}`
 }
