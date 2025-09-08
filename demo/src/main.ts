@@ -80,6 +80,12 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
   let str = prTools.timeRange(new Date(), { range: 'week', split: false, offset_d: 0 })
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: test:timeRange`, str)
 }
+// timeDimension
+{
+  const now = new Date().getTime()
+  let res = prTools.timeDimension(now, now, 'H')
+  console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: timeDimension`, res)
+}
 {
   // 生成今天开始的后面7天 分割当天 偏移到前一天
   let str = prTools.timeRange(new Date(), { range: 7, split: true, offset_d: -1 })

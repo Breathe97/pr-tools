@@ -41,6 +41,7 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
   const date = new Date(timestamp)
   const Y = `${date.getFullYear()}`
   const M = `${date.getMonth() + 1}`
+  const Q = `${['1', '2', '3'].includes(M) ? 1 : ['4', '5', '6'].includes(M) ? 2 : ['7', '8', '9'].includes(M) ? 3 : 4}`
   const D = `${date.getDate()}`
   const W = `${date.getDay() === 0 ? 7 : date.getDay()}`
   const h = `${date.getHours()}`
@@ -54,6 +55,7 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
   const opts = [
     { k: 'Y+', v: Y }, // 年
     { k: 'M+', v: M }, // 月
+    { k: 'Q+', v: Q }, // 季
     { k: 'D+', v: D }, // 日
     { k: 'W+', v: W }, // 周
     { k: 'h+', v: h }, // 时
@@ -258,4 +260,108 @@ export const timeRange = (_val?: any, _options: TimeRange_Options = {}) => {
     arr = [arr.slice(0, index), arr.slice(index, _offset_d), arr.slice(_offset_d)]
   }
   return arr
+}
+
+/**
+ *
+ * @param _start 开始时间 时间戳
+ * @param _end 结束时间时间戳
+ * @param dimension 时间维度（时 | 天 | 周 | 月 | 季 | 年）
+ * @returns string[]
+ */
+export const timeDimension = (_start: number, _end: number, dimension: 'H' | 'D' | 'W' | 'M' | 'Q' | 'Y' = 'D') => {
+  // 根据开始时间和结束时间生成维度集合
+  const arr: string[] = []
+
+  let start_timeStamp = timeStamp(_start)
+  const end_timeStamp = timeStamp(_end)
+
+  while (start_timeStamp <= end_timeStamp) {
+    switch (dimension) {
+      case 'H': // 时
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-MM-DD hh:00')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-MM-DD hh:00')
+
+          // 每次加1小时
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + h_timestamp
+            start_str = timeFormat(start_timeStamp, 'YYYY-MM-DD hh:00')
+          }
+          arr.push(start_str)
+        }
+
+        break
+      case 'D': // 天
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-MM-DD')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-MM-DD')
+
+          // 每次加1天
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + d_timestamp
+            start_str = timeFormat(start_timeStamp, 'YYYY-MM-DD')
+          }
+          arr.push(start_str)
+        }
+        break
+      case 'W': // 周
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-ww')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-ww')
+
+          // 每次加1周
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + d_timestamp * 7
+            start_str = timeFormat(start_timeStamp, 'YYYY-ww')
+          }
+          arr.push(start_str)
+        }
+        break
+      case 'M': // 月
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-MM')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-MM')
+
+          // 每次加 28 天
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + d_timestamp * 28
+            start_str = timeFormat(start_timeStamp, 'YYYY-MM')
+          }
+
+          arr.push(start_str)
+        }
+        break
+      case 'Q': // 季
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-QQ')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-QQ')
+
+          // 每次加 28 天
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + d_timestamp
+            start_str = timeFormat(start_timeStamp, 'YYYY-QQ')
+          }
+
+          arr.push(start_str)
+        }
+        break
+      case 'Y': // 年
+        {
+          const c_str = timeFormat(start_timeStamp, 'YYYY-YY')
+          let start_str = timeFormat(start_timeStamp, 'YYYY-YY')
+
+          // 每次加 300 天
+          while (arr.length !== 0 && c_str === start_str && start_timeStamp <= end_timeStamp) {
+            start_timeStamp = start_timeStamp + d_timestamp * 300
+            start_str = timeFormat(start_timeStamp, 'YYYY-YY')
+          }
+
+          arr.push(start_str)
+        }
+        break
+    }
+  }
+
+  return [...new Set(arr)]
 }
