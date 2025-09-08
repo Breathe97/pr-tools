@@ -1,3 +1,5 @@
+import { arrSlice } from './pr-array'
+
 /**
  * ArrayBuffer转十六进制
  * @param _buffer arrayBuffer
@@ -94,23 +96,44 @@ export const delSpaces = (_str: string = ''): string => {
  * @param options.splitStr 值与单位的分割符 默认为一个空格
  * @returns 格式化后的字符串
  */
-export const bytesFormat = (_bytes: number, _options: { unit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB' | 'EB' | 'ZB' | 'YB'; split?: string } = {}): string => {
+export const bytesFormat = (_bytes: number | string, _options: { unit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB' | 'EB' | 'ZB' | 'YB' | 'DB' | 'NB'; split?: string } = {}): string => {
   const options = { unit: 'B', splitStr: ' ', ..._options }
   let { unit, splitStr } = options
 
-  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'DB', 'NB']
 
   const index = units.findIndex((item) => item === unit)
 
   const _units = units.slice(index + 1, units.length)
 
-  let num = _bytes
-  for (const key of _units) {
-    unit = key
-    num = num / 1024
-    if (Math.abs(num) < 1024) break
+  const _bytes_arr = `${_bytes}`.split('')
+
+  const _bytes_arr_slice = arrSlice(_bytes_arr, 4)
+
+  const _bytes_arr_slice_reverse = _bytes_arr_slice.reverse()
+
+  let str = ''
+  let num = 0
+  for (const _bytes_items of _bytes_arr_slice_reverse) {
+    const val = _bytes_items.join('')
+    str = `${val}${str}`
+    num = Number(`${str}`)
+    if (num < 1024) continue
+    for (const key of _units) {
+      unit = key
+      num = num / 1024
+      if (Math.abs(num) < 1024) break
+    }
   }
   return `${num.toFixed(2)}${splitStr}${unit}`
+
+  // let num = _bytes
+  // for (const key of _units) {
+  //   unit = key
+  //   num = num / 1024
+  //   if (Math.abs(num) < 1024) break
+  // }
+  // return `${num.toFixed(2)}${splitStr}${unit}`
 }
 
 /**
