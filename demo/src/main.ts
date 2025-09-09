@@ -109,7 +109,8 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
 }
 // bytesFormat
 {
-  let res = prTools.bytesFormat(random(10000000, 100000000) * random(10000000, 100000000))
+  // let res = prTools.bytesFormat(random(10000000, 100000000) * random(10000000, 100000000))
+  let res = prTools.bytesFormat('-89016')
   console.log('\x1b[38;2;0;151;255m%c%s', 'color:#0097ff', `------->Breathe: bytesFormat`, res)
 }
 

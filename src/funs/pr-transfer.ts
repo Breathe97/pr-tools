@@ -106,12 +106,21 @@ export const bytesFormat = (_bytes: number | string, _options: { unit?: 'B' | 'K
 
   const _units = units.slice(index + 1, units.length)
 
-  const _bytes_arr = `${_bytes}`.split('')
+  let bytes_str = `${_bytes}`
+
+  // 对负数的处理
+  const is_minus = bytes_str[0] === '-'
+
+  if (is_minus) {
+    bytes_str = bytes_str.replace('-', '')
+  }
+
+  const _bytes_arr = bytes_str.split('')
 
   const _bytes_arr_slice = arrSlice(_bytes_arr, 4)
 
   const _bytes_arr_slice_reverse = _bytes_arr_slice.reverse()
-
+  
   let str = ''
   let num = 0
   for (const _bytes_items of _bytes_arr_slice_reverse) {
@@ -125,15 +134,7 @@ export const bytesFormat = (_bytes: number | string, _options: { unit?: 'B' | 'K
       if (Math.abs(num) < 1024) break
     }
   }
-  return `${num.toFixed(2)}${splitStr}${unit}`
-
-  // let num = _bytes
-  // for (const key of _units) {
-  //   unit = key
-  //   num = num / 1024
-  //   if (Math.abs(num) < 1024) break
-  // }
-  // return `${num.toFixed(2)}${splitStr}${unit}`
+  return `${is_minus ? '-' : ''}${num.toFixed(2)}${splitStr}${unit}`
 }
 
 /**
