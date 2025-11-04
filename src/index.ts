@@ -1,4 +1,5 @@
 export * from './funs/pr-array'
+export * from './funs/pr-generater'
 export * from './funs/pr-md5'
 export * from './funs/pr-random'
 export * from './funs/pr-time'
