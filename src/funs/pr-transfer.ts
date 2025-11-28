@@ -120,7 +120,7 @@ export const bytesFormat = (_bytes: number | string, _options: { unit?: 'B' | 'K
   const _bytes_arr_slice = arrSlice(_bytes_arr, 4)
 
   const _bytes_arr_slice_reverse = _bytes_arr_slice.reverse()
-  
+
   let str = ''
   let num = 0
   for (const _bytes_items of _bytes_arr_slice_reverse) {
@@ -249,4 +249,32 @@ export const groupBy = <T extends Record<string | number, any>>(_arr: T[], _key_
     obj[val] = [...itemArr, item]
   }
   return obj
+}
+/**
+ * 根据数组对象某个字段进行树结构组装
+ * @param data 对象数组
+ * @param parent_key 该对象的父级id
+ * @returns
+ */
+export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[], parent_key: keyof T) => {
+  const node_map = new Map<any, T & { children?: T[] }>()
+  const tree: (T & { children?: T[] })[] = []
+
+  // 单次遍历建立索引
+  data.forEach((item) => {
+    node_map.set(item.id, { ...item, children: [] })
+  })
+
+  // 单次遍历构建树
+  data.forEach((item) => {
+    const node = node_map.get(item.id)!
+    const parent_id = (item as any)[parent_key]
+
+    if (parent_id && node_map.has(parent_id)) {
+      node_map.get(parent_id)!.children!.push(node)
+    } else {
+      tree.push(node)
+    }
+  })
+  return tree
 }
