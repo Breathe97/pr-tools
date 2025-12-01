@@ -259,7 +259,7 @@ export const groupBy = <T extends Record<string | number, any>>(_arr: T[], _key_
  * @param options.children_key 生成后的子集字段名
  * @returns
  */
-export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[], options: { parent_key: keyof T; sort?: { [key in keyof T]?: -1 | 1 }; children_key?: string }) => {
+export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[], options: { parent_key: keyof T; sort?: { [key in keyof T]?: -1 | 1 }; children_key?: string }): (T & { children?: (T & { children?: any[] })[] })[] => {
   const { parent_key, sort = {}, children_key = 'children' } = options
 
   // 参数验证
@@ -276,13 +276,10 @@ export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[]
     return []
   }
 
-  interface TreeNode<T> extends Record<string, any> {
-    id: any
-    children?: TreeNode<T>[]
-  }
+  type TreeNode = T & { [key: string]: any; children?: TreeNode[] }
 
-  const nodeMap = new Map<any, TreeNode<T>>()
-  const tree: TreeNode<T>[] = []
+  const nodeMap = new Map<any, TreeNode>()
+  const tree: TreeNode[] = []
 
   // 第一次遍历：创建所有节点并初始化子节点数组
   data.forEach((item) => {
@@ -316,8 +313,8 @@ export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[]
     }
   })
 
-  // 改进的排序功能
-  const sortTree = (nodes: TreeNode<T>[]): TreeNode<T>[] => {
+  // 排序功能
+  const sortTree = (nodes: TreeNode[]): TreeNode[] => {
     if (Object.keys(sort).length === 0) return nodes
 
     return nodes
@@ -331,9 +328,7 @@ export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[]
         for (const key of sortKeys) {
           // @ts-ignore
           const order = sort[key]!
-          // @ts-ignore
           let aVal = a[key]
-          // @ts-ignore
           let bVal = b[key]
 
           // 处理 undefined 和 null 值
@@ -344,13 +339,7 @@ export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[]
           // 统一处理布尔值：true > false
           if (typeof aVal === 'boolean' && typeof bVal === 'boolean') {
             if (aVal !== bVal) {
-              return order === 1
-                ? aVal === true
-                  ? -1
-                  : 1 // true 排在前面
-                : aVal === true
-                ? 1
-                : -1 // false 排在前面
+              return order === 1 ? (aVal === true ? -1 : 1) : aVal === true ? 1 : -1
             }
             continue
           }
@@ -370,6 +359,5 @@ export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[]
 
   // 应用排序
   const sortedTree = sortTree(tree)
-
   return sortedTree
 }
