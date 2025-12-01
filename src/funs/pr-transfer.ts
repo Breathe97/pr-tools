@@ -250,31 +250,126 @@ export const groupBy = <T extends Record<string | number, any>>(_arr: T[], _key_
   }
   return obj
 }
+
 /**
  * 根据数组对象某个字段进行树结构组装
  * @param data 对象数组
- * @param parent_key 该对象的父级id
+ * @param options.parent_key 该对象的父级id
+ * @param options.sort 排序规则 [{ sort:-1 }]
+ * @param options.children_key 生成后的子集字段名
  * @returns
  */
-export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[], parent_key: keyof T) => {
-  const node_map = new Map<any, T & { children?: T[] }>()
-  const tree: (T & { children?: T[] })[] = []
+export const buildTree = <T extends { id: any } & Record<string, any>>(data: T[], options: { parent_key: keyof T; sort?: { [key in keyof T]?: -1 | 1 }; children_key?: string }) => {
+  const { parent_key, sort = {}, children_key = 'children' } = options
 
-  // 单次遍历建立索引
+  // 参数验证
+  if (!parent_key) {
+    throw new Error('The parent_key is mandatory.')
+  }
+
+  if (!Array.isArray(data)) {
+    throw new Error('Data must be an array.')
+  }
+
+  // 空数组直接返回
+  if (data.length === 0) {
+    return []
+  }
+
+  interface TreeNode<T> extends Record<string, any> {
+    id: any
+    children?: TreeNode<T>[]
+  }
+
+  const nodeMap = new Map<any, TreeNode<T>>()
+  const tree: TreeNode<T>[] = []
+
+  // 第一次遍历：创建所有节点并初始化子节点数组
   data.forEach((item) => {
-    node_map.set(item.id, { ...item, children: [] })
+    if (item.id == null) {
+      console.warn('Item missing id property:', item)
+      return
+    }
+
+    nodeMap.set(item.id, {
+      ...item,
+      [children_key]: []
+    })
   })
 
-  // 单次遍历构建树
+  // 第二次遍历：构建树形结构
   data.forEach((item) => {
-    const node = node_map.get(item.id)!
-    const parent_id = (item as any)[parent_key]
+    if (item.id == null) return
 
-    if (parent_id && node_map.has(parent_id)) {
-      node_map.get(parent_id)!.children!.push(node)
+    const node = nodeMap.get(item.id)
+    if (!node) return
+
+    const parentId = item[parent_key]
+
+    // 如果存在父节点且父节点在映射中，则添加到父节点的子节点中
+    if (parentId != null && parentId !== '' && nodeMap.has(parentId)) {
+      const parentNode = nodeMap.get(parentId)!
+      parentNode[children_key]!.push(node)
     } else {
+      // 否则作为根节点
       tree.push(node)
     }
   })
-  return tree
+
+  // 改进的排序功能
+  const sortTree = (nodes: TreeNode<T>[]): TreeNode<T>[] => {
+    if (Object.keys(sort).length === 0) return nodes
+
+    return nodes
+      .map((node) => ({
+        ...node,
+        [children_key]: node[children_key] ? sortTree(node[children_key]!) : []
+      }))
+      .sort((a, b) => {
+        const sortKeys = Object.keys(sort) as (keyof T)[]
+
+        for (const key of sortKeys) {
+          // @ts-ignore
+          const order = sort[key]!
+          // @ts-ignore
+          let aVal = a[key]
+          // @ts-ignore
+          let bVal = b[key]
+
+          // 处理 undefined 和 null 值
+          if (aVal == null && bVal == null) continue
+          if (aVal == null) return order === 1 ? 1 : -1
+          if (bVal == null) return order === 1 ? -1 : 1
+
+          // 统一处理布尔值：true > false
+          if (typeof aVal === 'boolean' && typeof bVal === 'boolean') {
+            if (aVal !== bVal) {
+              return order === 1
+                ? aVal === true
+                  ? -1
+                  : 1 // true 排在前面
+                : aVal === true
+                ? 1
+                : -1 // false 排在前面
+            }
+            continue
+          }
+
+          // 处理数字和字符串
+          if (aVal !== bVal) {
+            if (order === 1) {
+              return aVal < bVal ? -1 : aVal > bVal ? 1 : 0
+            } else {
+              return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
+            }
+          }
+        }
+        return 0
+      })
+  }
+
+  // 应用排序
+  const sortedTree = sortTree(tree)
+
+  return sortedTree
 }
