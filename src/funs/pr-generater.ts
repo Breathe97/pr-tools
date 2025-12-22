@@ -41,7 +41,8 @@ export const createMutedAudioStream = (audioContext?: AudioContext) => {
  * @param fps fps = 30
  * @returns MediaStream
  */
-export const createFakeVideoStream = (width = 10, height = 10, opacity = 0, fps = 30) => {
+// 生成视频流
+export const createFakeVideoStream = (width = 10, height = 10, fps = 30) => {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   canvas.width = width
@@ -49,23 +50,28 @@ export const createFakeVideoStream = (width = 10, height = 10, opacity = 0, fps 
 
   let hue = 0 // 用于控制颜色的变化
 
+  // 捕获画布流
+  const stream = canvas.captureStream(fps)
+
   const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height) // 清除画布
 
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-    gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, ${opacity})`) // 渐变开始颜色
-    gradient.addColorStop(1, `hsla(${hue + 120}, 100%, 50%, ${opacity})`) // 渐变结束颜色
+    gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, 0)`) // 渐变开始颜色
+    gradient.addColorStop(1, `hsla(${hue + 120}, 100%, 50%, 0)`) // 渐变结束颜色
 
     ctx.fillStyle = gradient // 设置填充样式为渐变
     ctx.fillRect(0, 0, canvas.width, canvas.height) // 填充矩形，即整个画布
 
     hue = (hue + 1) % 360 // 更新颜色值，实现动画效果
+
+    // 如果流状态被停止了则不再绘制
+    if (stream.active === true) {
+      setTimeout(draw, 100)
+    }
   }
 
-  setInterval(draw, 100)
-
-  // 捕获画布流
-  const stream = canvas.captureStream(fps)
+  draw()
 
   return stream
 }
