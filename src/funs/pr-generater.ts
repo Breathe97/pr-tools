@@ -42,7 +42,8 @@ export const createMutedAudioStream = (audioContext?: AudioContext) => {
  * @returns MediaStream
  */
 // 生成视频流
-export const createFakeVideoStream = (width = 10, height = 10, fps = 30) => {
+export const createFakeVideoStream = (width = 10, height = 10, fps = 20) => {
+  fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   canvas.width = width
@@ -67,7 +68,7 @@ export const createFakeVideoStream = (width = 10, height = 10, fps = 30) => {
 
     // 如果流状态被停止了则不再绘制
     if (stream.active === true) {
-      setTimeout(draw, 100)
+      setTimeout(draw, Math.round(1000 / fps))
     }
   }
 
