@@ -38,11 +38,11 @@ export const createMutedAudioStream = (audioContext?: AudioContext) => {
  * @param width width = 10
  * @param height height = 10
  * @param opacity opacity = 0
- * @param fps fps = 30
+ * @param fps fps = 20
  * @returns MediaStream
  */
 // 生成视频流
-export const createFakeVideoStream = (width = 10, height = 10, fps = 20) => {
+export const createFakeVideoStream = ({ width = 10, height = 10, opacity = 0, fps = 20 }: { width: number; height: number; opacity: number; fps: number }) => {
   fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
@@ -58,8 +58,8 @@ export const createFakeVideoStream = (width = 10, height = 10, fps = 20) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height) // 清除画布
 
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-    gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, 0)`) // 渐变开始颜色
-    gradient.addColorStop(1, `hsla(${hue + 120}, 100%, 50%, 0)`) // 渐变结束颜色
+    gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, ${opacity})`) // 渐变开始颜色
+    gradient.addColorStop(1, `hsla(${hue + 120}, 100%, 50%, ${opacity})`) // 渐变结束颜色
 
     ctx.fillStyle = gradient // 设置填充样式为渐变
     ctx.fillRect(0, 0, canvas.width, canvas.height) // 填充矩形，即整个画布
