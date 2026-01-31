@@ -43,7 +43,7 @@ export const createMutedAudioStream = (audioContext?: AudioContext) => {
  * @returns MediaStream
  */
 // 生成视频流
-export const createFakeVideoStream2 = ({ width = 10, height = 10, opacity = 0, fps = 20, text = '' }: { width: number; height: number; opacity: number; fps: number; text?: string }) => {
+export const createFakeVideoStream = ({ width = 10, height = 10, opacity = 0, fps = 20, text = '' }: { width: number; height: number; opacity: number; fps: number; text?: string }) => {
   fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
