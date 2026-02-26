@@ -11,7 +11,7 @@ const debouncetleMap = new Map()
 export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: number; message?: string } = {}) => {
   return new Promise<T>(async (resolve, reject) => {
     const { timeout = 5 * 1000, message = 'timeout' } = _options
-    const timer = window.setTimeout(() => reject(message), timeout)
+    const timer = setTimeout(() => reject(message), timeout)
     try {
       const res = await func()
       resolve(res)
@@ -29,11 +29,11 @@ export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: numb
  * @example exeStep(98, 7, ()=>{})
  * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
  */
-export const exeStep = async (_cuont: number, _step: number, _cb = async (_index: number, _cuonts: number[]) => {}) => {
-  const cuont = Math.max(0, _cuont)
-  const step = Math.min(cuont, Math.max(1, _step))
+export const exeStep = async (_count: number, _step: number, _cb = async (_index: number, _counts: number[]) => {}) => {
+  const count = Math.max(0, _count)
+  const step = Math.min(count, Math.max(1, _step))
 
-  let arr = Array(cuont)
+  let arr = Array(count)
   arr = Array.from(arr, (_, k) => k)
   arr = arrSlice(arr, step)
   for (const [index, cuonts] of arr.entries()) {

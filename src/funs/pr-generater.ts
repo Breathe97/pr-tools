@@ -35,15 +35,15 @@ export const createMutedAudioStream = (audioContext?: AudioContext) => {
 
 /**
  * 生成视频流
- * @param width width = 10
- * @param height height = 10
+ * @param width width = 32
+ * @param height height = 32
  * @param opacity opacity = 0
  * @param fps fps = 20
  * @param text text = '' 文本内容 如果看不清需要宽高设置大一点
  * @returns MediaStream
  */
 // 生成视频流
-export const createFakeVideoStream = ({ width = 10, height = 10, opacity = 0, fps = 20, text = '' }: { width: number; height: number; opacity: number; fps: number; text?: string }) => {
+export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fps = 20, text = '' }: { width: number; height: number; opacity: number; fps: number; text?: string }) => {
   fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!

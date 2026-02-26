@@ -11,8 +11,11 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
   const video = document.createElement('video')
   video.style.width = '200px'
   video.style.height = '200px'
-  video.srcObject = prTools.createFakeVideoStream(40, 40, 1)
-  video.play()
+  const stream = prTools.createFakeVideoStream({ width: 40, height: 40, opacity: 1 })
+  if (stream) {
+    video.srcObject = stream
+    video.play()
+  }
   document.querySelector('#app')?.appendChild(video)
 }
 

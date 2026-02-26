@@ -6,7 +6,7 @@ import { filterKeys } from './pr-transfer'
  * @example arrSlice([1, 2, 3, 4, 5], 2)
  * @returns 分割后的二维数组
  */
-export const arrSlice = (_arr: Array<any>, _size: number) => {
+export const arrSlice = <T>(_arr: T[], _size: number): T[][] => {
   const size = Math.max(1, _size)
   const arrNum = Math.ceil(_arr.length / size) // Math.ceil()向上取整的方法，用来计算拆分后数组的长度
   const result = []
@@ -29,16 +29,16 @@ export const arrSlice = (_arr: Array<any>, _size: number) => {
  * @example arrRange([0, 0], 10) // [0,10]
  */
 
-export const arrRange = (_arr = [], _accuracy = 10) => {
+export const arrRange = (_arr: Array<any> = [], _accuracy = 10) => {
   let min = 0
-  let max = 100
+  let max = 0
   // 去除非数
-  _arr = _arr.filter((item) => !isNaN(item))
+  const nums = _arr.filter((item) => !isNaN(item)).map((n) => Number(n))
+  if (nums.length === 0) return [0, _accuracy]
   // 对arr进行排序
-  _arr = _arr.sort((a, b) => (Number(a) < Number(b) ? -1 : 1))
-  min = _arr[0]
-  _arr.reverse()
-  max = _arr[0]
+  nums.sort((a, b) => a - b)
+  min = nums[0]
+  max = nums[nums.length - 1]
   // 根据精度处理min，max
   min = Math.floor(min / _accuracy) * _accuracy
   max = Math.ceil(max / _accuracy) * _accuracy
@@ -58,6 +58,7 @@ export const arrRange = (_arr = [], _accuracy = 10) => {
  * @returns 去重后的数组
  */
 export const arrFilterDup = <T extends Record<string | number, any>, K extends keyof T>(_arr: T[], _keys: K[] = [], _cover = true): T[] => {
+  if (_keys.length === 0) return [..._arr]
   const map = new Map()!
   for (const obj of _arr) {
     const arr = []

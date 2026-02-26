@@ -6,8 +6,10 @@
  * @returns 随机区间数字
  */
 export const random = (_min = 0, _max = 1) => {
-  const min = Math.max(0, _min)
-  const max = Math.max(1, _max)
+  const safeMin = Math.max(0, _min)
+  const safeMax = Math.max(1, _max)
+  const min = Math.min(safeMin, safeMax)
+  const max = Math.max(safeMin, safeMax)
   const num = Math.random() * (max - min + 1) + min
   return parseInt(`${num}`, 10)
 }
