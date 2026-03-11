@@ -1,34 +1,28 @@
 /**
  * 生成静音音频轨道（无声音）
  * @param audioContext
+ * @param gain 音量 默认0.0001
  * @returns MediaStream
  */
-export const createMutedAudioStream = (audioContext?: AudioContext) => {
+export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.0001) => {
   if (!audioContext) {
-    // @ts-ignore 音频上下文
-    audioContext = AudioContext = new (window.AudioContext || window.webkitAudioContext)()
+    const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    audioContext = new Ctor()
   }
   const oscillator = audioContext.createOscillator()
   oscillator.type = 'sine'
-  oscillator.frequency.setValueAtTime(0, audioContext.currentTime) // 零频率
+  // 使用非零频率才能产生真实波形数据；1 Hz 人耳听不见
+  oscillator.frequency.setValueAtTime(1, audioContext.currentTime)
 
-  // 创建增益节点（强制静音）
   const gainNode = audioContext.createGain()
-  gainNode.gain.value = 0 // 静音设置
+  gainNode.gain.setValueAtTime(gain, audioContext.currentTime) // 增益为 0 = 静音
 
-  // 连接音频源 → 增益节点 → 输出
   oscillator.connect(gainNode)
-  gainNode.connect(audioContext.destination)
 
-  // 启动音频源
-  oscillator.start()
-
-  // 创建媒体流目的地
   const mediaDest = audioContext.createMediaStreamDestination()
+  gainNode.connect(mediaDest)
 
-  // 将音频链路接入媒体流
-  gainNode.disconnect() // 断开原有连接
-  oscillator.connect(mediaDest)
+  oscillator.start(audioContext.currentTime)
 
   return mediaDest.stream
 }
