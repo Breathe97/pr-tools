@@ -90,7 +90,7 @@ export const timeFormat = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', 
  * @example timeFrom(new Date().getTime() - 5600000)
  * @returns 格式化后的字符串
  */
-export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _options: Time_Options = {}): string => {
+export const timeFrom = (_val?: any, _format?: string, _options: Time_Options = {}): string => {
   const options = { empty_str: '-', ..._options }
   const { empty_str, offset } = options
 
@@ -125,7 +125,7 @@ export const timeFrom = (_val?: any, _format: string = 'YYYY-MM-DD hh:mm:ss', _o
           tips = Math.floor(timer / (86400 * 365)) + '年前'
         }
       } else {
-        tips = `${timeFormat(timer, _format)}`
+        tips = `${timeFormat(timestamp, _format)}`
       }
   }
   return tips
