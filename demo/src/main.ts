@@ -13,7 +13,7 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
   const video = document.createElement('video')
   video.style.background = '#000000'
   video.controls = true
-  const stream = prTools.createFakeVideoStream({ width: 800, height: 600, opacity: 1 })
+  const stream = prTools.createFakeVideoStream({ width: 800, height: 600, opacity: 1, fps: 30 })
   if (stream) {
     video.srcObject = stream
   }
