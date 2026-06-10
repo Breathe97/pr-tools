@@ -35,27 +35,32 @@ export const offsetTimeStamp = (_val?: Date | number | string, _offset?: number)
 }
 
 /**
- * 一秒的毫秒
+ * 一秒的毫秒数
+ * @example s_timestamp // 1000
  */
 export const s_timestamp = 1000 // 秒
 
 /**
- * 一分钟的毫秒
+ * 一分钟的毫秒数
+ * @example m_timestamp // 60000
  */
 export const m_timestamp = s_timestamp * 60 // 分
 
 /**
- * 一小时的毫秒
+ * 一小时的毫秒数
+ * @example h_timestamp // 3600000
  */
 export const h_timestamp = m_timestamp * 60 // 时
 
 /**
- * 一天的毫秒
+ * 一天的毫秒数
+ * @example d_timestamp // 86400000
  */
 export const d_timestamp = h_timestamp * 24 // 天
 
 /**
- * 周的转换枚举
+ * 星期数字与中文映射表，供 timeFormat 的 WW 占位符使用
+ * @example week_enum['01'] // '一'
  */
 export const week_enum = {
   ['1']: '1',
