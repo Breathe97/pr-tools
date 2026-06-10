@@ -1,3 +1,5 @@
+import './style.css'
+
 import * as prTools from '../../src/index.js'
 import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_timestamp } from '../../src/index.js'
 
@@ -9,12 +11,11 @@ import { uuid, random, randomName, md5, timeFormat, timeFrom, arrFromEnum, h_tim
 
 {
   const video = document.createElement('video')
-  video.style.width = '200px'
-  video.style.height = '200px'
-  const stream = prTools.createFakeVideoStream({ width: 40, height: 40, opacity: 1 })
+  video.style.background = '#000000'
+  video.controls = true
+  const stream = prTools.createFakeVideoStream({ width: 800, height: 600, opacity: 1 })
   if (stream) {
     video.srcObject = stream
-    video.play()
   }
   document.querySelector('#app')?.appendChild(video)
 }
