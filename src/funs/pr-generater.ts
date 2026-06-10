@@ -1,8 +1,9 @@
 /**
- * 生成静音音频轨道（无声音）
- * @param audioContext
- * @param gain 音量 默认0.0001
- * @returns MediaStream
+ * 生成静音音频流（WebRTC 等场景）
+ * @example const { stream } = createMutedAudioStream()
+ * @example const { stream, destroy } = createMutedAudioStream(ctx)
+ * @example pc.addTrack(createMutedAudioStream().stream.getAudioTracks()[0])
+ * @returns { stream, destroy }
  */
 export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.0001) => {
   if (!audioContext) {
@@ -11,20 +12,23 @@ export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.000
   }
   const oscillator = audioContext.createOscillator()
   oscillator.type = 'sine'
-  // 使用非零频率才能产生真实波形数据；1 Hz 人耳听不见
   oscillator.frequency.setValueAtTime(1, audioContext.currentTime)
-
   const gainNode = audioContext.createGain()
-  gainNode.gain.setValueAtTime(gain, audioContext.currentTime) // 增益为 0 = 静音
-
+  gainNode.gain.setValueAtTime(gain, audioContext.currentTime)
   oscillator.connect(gainNode)
-
   const mediaDest = audioContext.createMediaStreamDestination()
   gainNode.connect(mediaDest)
-
   oscillator.start(audioContext.currentTime)
-
-  return mediaDest.stream
+  const destroy = () => {
+    try {
+      oscillator.stop()
+      oscillator.disconnect()
+      gainNode.disconnect()
+    } catch {
+      /* 已停止 */
+    }
+  }
+  return { stream: mediaDest.stream, destroy }
 }
 
 /**

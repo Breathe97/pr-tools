@@ -1,30 +1,35 @@
 /**
- * 修正时间戳 失败返回 0
- * @param _val Date | number | string
- * @param _offset 时区差值 如中国 +480，不传则以当前环境为准 不进行修正
- * @example offsetTimeStamp(1727550913097, 480)
- * @returns 转换后的时间戳 | 0
+ * 修正时间戳，失败返回 0
+ * @param _val 日期、时间戳或日期字符串
+ * @param _offset 时区差值，如中国 +480；不传则按当前环境
+ * @example offsetTimeStamp() // 当前时间戳
+ * @example offsetTimeStamp('2024-05-23') // 日期字符串
+ * @example offsetTimeStamp(1727550913097, 480) // 指定时区偏移
+ * @returns 毫秒时间戳，失败为 0
  */
 export const offsetTimeStamp = (_val?: Date | number | string, _offset?: number) => {
   try {
-    // 尝试转为数字
-    let timestamp = Number(_val)
-
-    // 如果不是数字 尝试转为标准时间 并获取时间戳
-    if (isNaN(timestamp)) {
-      const date = new Date(`${_val}`)
-      if (`${date}` === 'Invalid Date') return 0
+    // 空值视为无效输入
+    if (_val === undefined || _val === null || _val === '') return 0
+    let timestamp: number
+    if (_val instanceof Date) {
+      timestamp = _val.getTime()
+    } else if (typeof _val === 'number') {
+      timestamp = _val
+    } else {
+      const date = new Date(_val)
+      if (Number.isNaN(date.getTime())) return 0
       timestamp = date.getTime()
     }
-
-    // 传入时区差
+    if (Number.isNaN(timestamp)) return 0
+    // 修正到目标时区
     if (_offset !== undefined) {
-      const timezoneOffset = new Date().getTimezoneOffset() // 当前时区偏差 例如 中国为 -480 传入 _offset = 480 的时候先纠正到0时区 再 + _offset
+      const timezoneOffset = new Date().getTimezoneOffset()
       timestamp += (timezoneOffset + _offset) * 60 * 1000
     }
     return timestamp
   } catch (error) {
-    console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->timeStamp:err`, { _val, _offset, error })
+    console.error('offsetTimeStamp error', { _val, _offset, error })
     return 0
   }
 }

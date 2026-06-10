@@ -111,10 +111,11 @@ let uTF8Encode = (string) => {
 }
 
 /**
- * 对字符串进行md5加密
- * @param _string 需要加密的字符串
- * @example md5('123456')
- * @returns 加密后的字符串
+ * 对字符串进行 MD5 加密（纯 JS，兼容性好）
+ * @example md5('123456') // 'e10adc3949ba59abbe56e057f20f883e'
+ * @example md5('')
+ * @example md5('hello')
+ * @returns 32 位小写十六进制字符串
  */
 export const md5 = (_string = '') => {
   let x = Array()

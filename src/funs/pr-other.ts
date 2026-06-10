@@ -1,12 +1,14 @@
 import { arrSlice } from './pr-array'
 
 const throttleMap = new Map<string, ReturnType<typeof setTimeout>>()
-const debouncetleMap = new Map<string, ReturnType<typeof setTimeout>>()
+const debounceMap = new Map<string, ReturnType<typeof setTimeout>>()
 
 /**
- * 执行超时
- * @param func 待执行函数
- * @param _options { timeout?: number; message?: string }
+ * 为 Promise 增加超时
+ * @example await exeTimeout(() => fetch('/api'), { timeout: 3000 })
+ * @example await exeTimeout(async () => slowTask(), { message: '请求超时' })
+ * @example exeTimeout(() => Promise.resolve(1), { timeout: 1000 })
+ * @returns 原 Promise 结果，超时则 reject
  */
 export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: number; message?: string } = {}) => {
   const { timeout = 5000, message = 'timeout' } = _options
@@ -25,60 +27,56 @@ export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: numb
 }
 
 /**
- * 分段执行
- * @param _cuont 一共执行多少次 最小为 0
- * @param _step 每次执行多少次 最小为 1
- * @example exeStep(98, 7, ()=>{})
- * @returns 筛选后结果 传入对象返回对象 传入数组返回数组
+ * 将 count 次执行按 step 分批串行执行
+ * @example await exeStep(98, 7, async (i, counts) => { console.log(i, counts) })
+ * @example await exeStep(10, 3, cb)
+ * @example await exeStep(0, 5, cb) // 不执行
+ * @returns 分批后的索引二维数组
  */
 export const exeStep = async (_count: number, _step: number, _cb = async (_index: number, _counts: number[]) => {}) => {
   const count = Math.max(0, _count)
   const step = Math.min(count, Math.max(1, _step))
-
-  let arr = Array(count)
-  arr = Array.from(arr, (_, k) => k)
-  arr = arrSlice(arr, step)
-  for (const [index, cuonts] of arr.entries()) {
-    await _cb(index, cuonts)
+  const indices = Array.from({ length: count }, (_, k) => k)
+  const chunks = arrSlice(indices, step)
+  for (const [index, counts] of chunks.entries()) {
+    await _cb(index, counts)
   }
-  return arr
+  return chunks
 }
 
 /**
- * 延迟执行 强制将请求延长时间以模拟 loading
- * @param _func 需要执行的函数
- * @param _timeout 最小执行时间ms 默认 500ms
- * @example await exeDelayed(()=>{}, 500)
- * @returns
+ * 保证函数至少执行指定毫秒（模拟 loading）
+ * @example await exeDelayed(() => fetch('/api'), 500)
+ * @example await exeDelayed(async () => { await work() }, 1000)
+ * @example const data = await exeDelayed(() => getData(), 300)
+ * @returns 原函数返回值
  */
-export const exeDelayed = async (_func: Function, _timeout: number = 500) => {
-  const exe_timestamp = Date.now() + _timeout // 记录可执行时间
-  return new Promise(async (resolve) => {
-    const res = await _func()
-    const offset_timestamp = Math.max(0, exe_timestamp - Date.now()) // 计算还需要等待的时间
-    await new Promise((resolve) => setTimeout(() => resolve(true), offset_timestamp)) // 等待时间
-    resolve(res)
-  })
+export const exeDelayed = async <T>(_func: () => T | Promise<T>, _timeout = 500) => {
+  const deadline = Date.now() + _timeout
+  const result = await _func()
+  const wait = Math.max(0, deadline - Date.now())
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait))
+  return result
 }
 
 /**
- * 检查函数执行消耗时间
- * @param _func 需要执行的函数
- * @example const elapsed = await exeElapsed(()=>{})
- * @returns elapsed 消耗时间 ms
+ * 测量函数执行耗时（毫秒）
+ * @example const { elapsed } = await exeElapsed(async () => { await task() })
+ * @example const { elapsed, result } = await exeElapsed(() => compute(1))
+ * @example await exeElapsed(() => console.log('hi'))
+ * @returns { elapsed, result }
  */
-export const exeElapsed = async (_func: Function) => {
-  const now = Date.now()
-  await _func()
-  const elapsed = Date.now() - now
-  return elapsed
+export const exeElapsed = async <T>(_func: () => T | Promise<T>) => {
+  const start = performance.now()
+  const result = await _func()
+  return { elapsed: performance.now() - start, result }
 }
 
 /**
- * 节流
- * @param _key 唯一标识
- * @param _func 函数
- * @param _delay 节流时间  (该时间只内调用一次)
+ * 按 key 节流：delay 毫秒内最多执行一次
+ * @example throttle('search', () => doSearch(), 300)
+ * @example throttle('resize', onResize, 200)
+ * @example throttle('submit', submitForm, 1000)
  */
 export const throttle = (_key: string, _func: Function, _delay: number) => {
   const now = Date.now()
@@ -90,17 +88,17 @@ export const throttle = (_key: string, _func: Function, _delay: number) => {
 }
 
 /**
- * 防抖
- * @param _key 唯一标识
- * @param _func 函数
- * @param _delay 防抖时间 (大于该时间之后才调用)
+ * 按 key 防抖：停止触发 delay 毫秒后执行
+ * @example debounce('search', () => doSearch(), 300)
+ * @example debounce('input', saveDraft, 500)
+ * @example debounce('resize', drawChart, 200)
  */
-export const debounce2 = (_key: string, _func: Function, _delay: number) => {
-  const prev = debouncetleMap.get(_key)
+export const debounce = (_key: string, _func: Function, _delay: number) => {
+  const prev = debounceMap.get(_key)
   if (prev) clearTimeout(prev)
   const timer = setTimeout(() => {
-    debouncetleMap.delete(_key)
+    debounceMap.delete(_key)
     _func()
   }, _delay)
-  debouncetleMap.set(_key, timer)
+  debounceMap.set(_key, timer)
 }
