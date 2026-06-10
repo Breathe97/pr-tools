@@ -31,7 +31,7 @@ export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.000
  * 生成视频流
  * @param width width = 32
  * @param height height = 32
- * @param opacity opacity = 0
+ * @param opacity opacity = 1
  * @param fps fps = 20
  * @param text text = '' 文本内容 如果看不清需要宽高设置大一点
  * @returns MediaStream

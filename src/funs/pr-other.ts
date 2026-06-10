@@ -1,7 +1,7 @@
 import { arrSlice } from './pr-array'
 
-const throttleMap = new Map()
-const debouncetleMap = new Map()
+const throttleMap = new Map<string, ReturnType<typeof setTimeout>>()
+const debouncetleMap = new Map<string, ReturnType<typeof setTimeout>>()
 
 /**
  * 执行超时
@@ -9,16 +9,18 @@ const debouncetleMap = new Map()
  * @param _options { timeout?: number; message?: string }
  */
 export const exeTimeout = <T>(func: () => Promise<T>, _options: { timeout?: number; message?: string } = {}) => {
-  return new Promise<T>(async (resolve, reject) => {
-    const { timeout = 5 * 1000, message = 'timeout' } = _options
-    const timer = setTimeout(() => reject(message), timeout)
-    try {
-      const res = await func()
-      resolve(res)
-    } catch (error) {
-      reject(error)
-    }
-    clearTimeout(timer)
+  const { timeout = 5000, message = 'timeout' } = _options
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(message)), timeout)
+    func()
+      .then((res) => {
+        clearTimeout(timer)
+        resolve(res)
+      })
+      .catch((err) => {
+        clearTimeout(timer)
+        reject(err)
+      })
   })
 }
 
@@ -79,12 +81,11 @@ export const exeElapsed = async (_func: Function) => {
  * @param _delay 节流时间  (该时间只内调用一次)
  */
 export const throttle = (_key: string, _func: Function, _delay: number) => {
-  const now = new Date().getTime()
-  const timestamp = throttleMap.get(_key) || 0
-  // 如果本次触发时间大于上一次触发时间
-  if (now - _delay > timestamp) {
+  const now = Date.now()
+  const last = throttleMap.get(_key) ?? 0
+  if (now - last >= _delay) {
+    throttleMap.set(_key, now)
     _func()
-    throttleMap.set(_key, now) // 记录本次时间
   }
 }
 
@@ -94,16 +95,12 @@ export const throttle = (_key: string, _func: Function, _delay: number) => {
  * @param _func 函数
  * @param _delay 防抖时间 (大于该时间之后才调用)
  */
-export const debounce = (_key: string, _func: Function, _delay: number) => {
-  const now = new Date().getTime()
-  const timestamp = debouncetleMap.get(_key)
-  if (!timestamp) {
-    debouncetleMap.set(_key, now) // 记录本次时间
-    return
-  }
-  // 如果本次触发时间大于上一次触发时间
-  if (now - _delay > timestamp) {
+export const debounce2 = (_key: string, _func: Function, _delay: number) => {
+  const prev = debouncetleMap.get(_key)
+  if (prev) clearTimeout(prev)
+  const timer = setTimeout(() => {
+    debouncetleMap.delete(_key)
     _func()
-    debouncetleMap.set(_key, now) // 记录本次时间
-  }
+  }, _delay)
+  debouncetleMap.set(_key, timer)
 }
