@@ -1,6 +1,8 @@
 import { filterKeys } from './pr-transfer'
 /**
  * 一维数组按长度切分为二维数组
+ * @param _arr 待切分的一维数组
+ * @param _size 每段长度，最小为 1
  * @example arrSlice([1, 2, 3, 4, 5], 2) // [[1,2],[3,4],[5]]
  * @example arrSlice(['a', 'b', 'c'], 1) // [['a'],['b'],['c']]
  * @example arrSlice([], 3) // []
@@ -17,6 +19,8 @@ export const arrSlice = <T>(_arr: T[], _size: number): T[][] => {
 
 /**
  * 计算图表 Y 轴友好区间 [min, max]
+ * @param _arr 数值数组，非数字项会被忽略
+ * @param _accuracy 刻度对齐精度，默认 10
  * @example arrRange([-13, 37, 67]) // [-20, 70]
  * @example arrRange([0, 0], 10) // [0, 10]
  * @example arrRange([1, 87], 10) // [0, 90]
@@ -40,6 +44,9 @@ export const arrRange = (_arr: Array<any> = [], _accuracy = 10) => {
 
 /**
  * 按字段组合去重
+ * @param _arr 对象数组
+ * @param _keys 参与去重的字段名列表；为空则返回浅拷贝
+ * @param _cover 重复时是否用后者覆盖前者，默认 true
  * @example arrFilterDup([{age:10},{age:10},{age:12}], ['age']) // 保留两条 age 不同
  * @example arrFilterDup(arr, ['name','age'], true)  // 重复时后者覆盖
  * @example arrFilterDup(arr, ['name','age'], false) // 重复时保留前者
@@ -61,6 +68,8 @@ export const arrFilterDup = <T extends Record<string | number, any>, K extends k
 
 /**
  * 批量筛选对象数组中的指定字段
+ * @param _arr 对象数组
+ * @param _keys 需要保留的字段名列表
  * @example arrFilterKeys([{a:1,b:2},{a:3,b:4}], ['a']) // [{a:1},{a:3}]
  * @example arrFilterKeys(users, ['name', 'age'])
  * @example arrFilterKeys([], ['id']) // []
@@ -70,6 +79,9 @@ export const arrFilterKeys = <T extends Record<string | number, any>, K extends 
 
 /**
  * 枚举对象转 { label, value } 数组
+ * @param _enum 枚举对象，键为 value，值为 label
+ * @param _value_name 输出对象中 value 字段名，默认 'value'
+ * @param _label_name 输出对象中 label 字段名，默认 'label'
  * @example arrFromEnum({ a: '标签A', b: '标签B' }) // [{label:'标签A',value:'a'},...]
  * @example arrFromEnum(obj, 'key', 'name')
  * @example arrFromEnum({ 1: '一', 2: '二' }, 'id', 'text')

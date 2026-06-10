@@ -3,6 +3,8 @@ const nameStr = '徒靡绪风颢阳曜灵越扶应图町歧蜀魄漠泊穆皇星
 
 /**
  * 生成 [min, max] 闭区间随机整数
+ * @param _min 最小值，默认 0，内部不小于 0
+ * @param _max 最大值，默认 1，内部不小于 1
  * @example random(100000, 999999) // 6 位验证码
  * @example random(0, 1) // 0 或 1
  * @example random() // 0 或 1（默认）
@@ -18,6 +20,8 @@ export const random = (_min = 0, _max = 1) => {
 
 /**
  * 生成带时间前缀的随机 ID（非密码学安全）
+ * @param _len 目标字符串总长度，默认 16
+ * @param _radix 时间戳与随机字符使用的进制，默认 16，最大 36
  * @example uuid(32, 16)
  * @example uuid(16, 36)
  * @example uuid(8, 10)
@@ -36,6 +40,8 @@ export const uuid = (_len: number = 16, _radix: number = 16) => {
 
 /**
  * 随机生成 min~max 个汉字的昵称
+ * @param _min 昵称最少汉字数，默认 1，最小 1
+ * @param _max 昵称最多汉字数，默认 1，最小 1
  * @example randomName(2, 4) // 2~4 个汉字
  * @example randomName(1, 1) // 1 个汉字
  * @example randomName(3, 6)

@@ -1,9 +1,11 @@
 /**
  * 生成静音音频流（WebRTC 等场景）
+ * @param audioContext 可选，复用已有 AudioContext；不传则自动创建
+ * @param gain 增益值，默认 0.0001（接近静音）
  * @example const { stream } = createMutedAudioStream()
  * @example const { stream, destroy } = createMutedAudioStream(ctx)
  * @example pc.addTrack(createMutedAudioStream().stream.getAudioTracks()[0])
- * @returns { stream, destroy }
+ * @returns stream 静音 MediaStream；destroy 用于释放振荡器资源
  */
 export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.0001) => {
   if (!audioContext) {
@@ -32,16 +34,18 @@ export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.000
 }
 
 /**
- * 生成视频流
- * @param width width = 32
- * @param height height = 32
- * @param opacity opacity = 1
- * @param fps fps = 20
- * @param text text = '' 文本内容 如果看不清需要宽高设置大一点
+ * 生成假视频流（彩色渐变画布，用于测试或占位）
+ * @param options 视频流配置
+ * @param options.width 画布宽度（像素），默认 32
+ * @param options.height 画布高度（像素），默认 32
+ * @param options.opacity 颜色与文字不透明度 0~1，默认 1
+ * @param options.fps 帧率，最大 30，默认 20
+ * @param options.text 画布居中文字，默认空；文字较长时需增大宽高
+ * @example createFakeVideoStream({ width: 640, height: 480, fps: 20 })
+ * @example createFakeVideoStream({ width: 32, height: 32, text: 'REC' })
  * @returns MediaStream
  */
-// 生成视频流
-export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fps = 20, text = '' }: { width: number; height: number; opacity: number; fps: number; text?: string }) => {
+export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fps = 20, text = '' }: { width?: number; height?: number; opacity?: number; fps?: number; text?: string } = {}) => {
   fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!

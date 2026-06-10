@@ -112,6 +112,7 @@ let uTF8Encode = (string) => {
 
 /**
  * 对字符串进行 MD5 加密（纯 JS，兼容性好）
+ * @param _string 待加密的字符串，默认空字符串
  * @example md5('123456') // 'e10adc3949ba59abbe56e057f20f883e'
  * @example md5('')
  * @example md5('hello')
