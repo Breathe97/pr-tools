@@ -52,15 +52,16 @@ export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fp
   canvas.width = width
   canvas.height = height
 
-  let hue = 0 // 颜色变化控制
+  let hue = 0
+  let destroyed = false // ← 销毁标记
 
-  // 捕获画布流
   const stream = canvas.captureStream(fps)
 
   const draw = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height) // 清除画布
+    if (destroyed) return // ← 已销毁则不再绘制
 
-    // 绘制渐变背景
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
     gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, ${opacity})`)
     gradient.addColorStop(1, `hsla(${hue + 120}, 100%, 50%, ${opacity})`)
@@ -68,25 +69,29 @@ export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fp
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    // 绘制居中文本（如果提供了文本）
     if (text) {
-      const fontSize = Math.min(width, height) * 0.8 // 动态字体大小
+      const fontSize = Math.min(width, height) * 0.8
       ctx.font = `bold ${fontSize / text.length}px Arial`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})` // 白色文本
-
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`
       ctx.fillText(text, canvas.width * 0.5, canvas.height * 0.5)
     }
 
-    hue = (hue + 1) % 360 // 更新颜色值
+    hue = (hue + 1) % 360
 
-    // 继续绘制动画（如果流仍活跃）
-    if (stream.active) {
+    if (!destroyed && stream.active) {
       setTimeout(draw, Math.round(1000 / fps))
     }
   }
 
   draw()
-  return stream
+
+  const destroy = () => {
+    destroyed = true
+    stream.getTracks().forEach(t => t.stop())
+    // canvas 是 detached 元素，失去引用后 GC 会自动回收
+  }
+
+  return { stream, destroy }
 }

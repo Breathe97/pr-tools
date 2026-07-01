@@ -1,7 +1,7 @@
 {
   "name": "pr-tools",
   "description": "一些常用的js方法：时间处理、数组处理、md5加密、uuid、随机中文名等各种转换。",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "type": "module",
   "files": [
     "dist"
@@ -22,8 +22,8 @@
   "dependencies": {},
   "devDependencies": {
     "typescript": "^6.0.2",
-    "vite": "^8.0.5",
-    "vite-plugin-dts": "^4.5.4"
+    "vite": "^8.1.2",
+    "vite-plugin-dts": "^5.0.3"
   },
   "private": false,
   "author": "Breathe",
