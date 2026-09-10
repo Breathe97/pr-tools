@@ -38,14 +38,12 @@ export const createMutedAudioStream = (audioContext?: AudioContext, gain = 0.000
  * @param options 视频流配置
  * @param options.width 画布宽度（像素），默认 32
  * @param options.height 画布高度（像素），默认 32
- * @param options.opacity 颜色与文字不透明度 0~1，默认 1
+ * @param options.opacity 颜色不透明度 0~1，默认 1
  * @param options.fps 帧率，最大 30，默认 20
- * @param options.text 画布居中文字，默认空；文字较长时需增大宽高
  * @example createFakeVideoStream({ width: 640, height: 480, fps: 20 })
- * @example createFakeVideoStream({ width: 32, height: 32, text: 'REC' })
- * @returns MediaStream
+ * @returns stream 假视频 MediaStream；destroy 用于停止轨道并停止绘制
  */
-export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fps = 20, text = '' }: { width?: number; height?: number; opacity?: number; fps?: number; text?: string } = {}) => {
+export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fps = 20 }: { width?: number; height?: number; opacity?: number; fps?: number } = {}) => {
   fps = Math.min(fps, 30)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
@@ -69,15 +67,6 @@ export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fp
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    if (text) {
-      const fontSize = Math.min(width, height) * 0.8
-      ctx.font = `bold ${fontSize / text.length}px Arial`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`
-      ctx.fillText(text, canvas.width * 0.5, canvas.height * 0.5)
-    }
-
     hue = (hue + 1) % 360
 
     if (!destroyed && stream.active) {
@@ -89,7 +78,7 @@ export const createFakeVideoStream = ({ width = 32, height = 32, opacity = 1, fp
 
   const destroy = () => {
     destroyed = true
-    stream.getTracks().forEach(t => t.stop())
+    stream.getTracks().forEach((t) => t.stop())
     // canvas 是 detached 元素，失去引用后 GC 会自动回收
   }
 
